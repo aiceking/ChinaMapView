@@ -77,7 +77,11 @@ public class MyMapView extends View{
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         int width=MeasureSpec.getSize(widthMeasureSpec);
-        setMeasuredDimension(width, (int) map.getMax_y());
+        if (map!=null){
+            map_scale=width/map.getMax_x();
+        }
+        int height=(int) (map.getMax_y()*map_scale);
+        setMeasuredDimension(width, height);
     }
     //设置最大缩放倍数
     public void setMaxScale(float a){
