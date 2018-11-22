@@ -1,4 +1,4 @@
-package com.aiceking.chinamap.old;
+package com.aiceking.chinamap.model;
 
 /**
  * Created by Vmmet on 2016/9/29.

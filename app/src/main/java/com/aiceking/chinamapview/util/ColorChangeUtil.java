@@ -1,4 +1,4 @@
-package com.aiceking.chinamap.old;
+package com.aiceking.chinamapview.util;
 
 import android.graphics.Color;
 import android.util.Log;
@@ -12,7 +12,7 @@ import java.util.HashMap;
 /**
  * Created by Vmmet on 2016/11/1.
  */
-public class ColorChangeHelp {
+public class ColorChangeUtil {
         private static HashMap<String ,String> hashmap;
 public static String province_datas[]={"北京市_17.58_6.87_427_1435","天津市_7.29_11.75_376_1208",
         "河北省_-2.84_9.54_414_1090_431_1141" ,

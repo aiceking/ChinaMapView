@@ -1,4 +1,4 @@
-package com.aiceking.chinamap.old;
+package com.aiceking.chinamap.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -7,6 +7,8 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
 
+
+import com.aiceking.chinamap.model.MycolorArea;
 
 import java.util.List;
 

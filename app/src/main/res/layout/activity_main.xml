@@ -18,7 +18,7 @@
                 android:layout_margin="5dp"
                 android:id="@+id/view"
                 />
-            <com.aiceking.chinamap.old.ColorView
+            <com.aiceking.chinamap.view.ColorView
                 android:layout_width="match_parent"
                 android:layout_height="33dp"
                 android:id="@+id/colorView"/>

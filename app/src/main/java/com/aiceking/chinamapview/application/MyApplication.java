@@ -1,4 +1,4 @@
-package com.aiceking.chinamapview;
+package com.aiceking.chinamapview.application;
 
 import android.app.Application;
 

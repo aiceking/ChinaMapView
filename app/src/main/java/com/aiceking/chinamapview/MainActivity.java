@@ -8,11 +8,11 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.aiceking.chinamap.model.ChinaMapModel;
-import com.aiceking.chinamap.old.ColorChangeHelp;
-import com.aiceking.chinamap.old.ColorView;
+import com.aiceking.chinamapview.util.ColorChangeUtil;
+import com.aiceking.chinamap.view.ColorView;
 import com.aiceking.chinamap.util.SvgUtil;
 import com.aiceking.chinamap.view.ChinaMapView;
-import com.aiceking.chinamap.old.MycolorArea;
+import com.aiceking.chinamap.model.MycolorArea;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,18 +38,18 @@ public class MainActivity extends AppCompatActivity {
         //初始化map
         initMap();
         //初始化map各省份颜色
-        ColorChangeHelp.changeMapColors(myMap,ColorChangeHelp.nameStrings[0]);
+        ColorChangeUtil.changeMapColors(myMap, ColorChangeUtil.nameStrings[0]);
         mapview.chingeMapColors();
         //listview
         setListAdapter();
         changeType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String namestring = ColorChangeHelp.nameStrings[++currentColor % ColorChangeHelp.nameStrings.length];
+                String namestring = ColorChangeUtil.nameStrings[++currentColor % ColorChangeUtil.nameStrings.length];
                 changeType.setText(namestring);
                 colorView.setList(colorView_hashmap.get(namestring));
                 //重置map各省份颜色
-                ColorChangeHelp.changeMapColors(myMap, namestring);
+                ColorChangeUtil.changeMapColors(myMap, namestring);
                 mapview.chingeMapColors();
             }
         });
@@ -70,8 +70,8 @@ public class MainActivity extends AppCompatActivity {
     private void setListAdapter() {
         list=new ArrayList<>();
         //最后三个是香港，澳门和台湾，不需要
-        for (int i=0;i<ColorChangeHelp.province_datas.length-3;i++){
-            list.add(ColorChangeHelp.province_datas[i]);
+        for (int i = 0; i< ColorChangeUtil.province_datas.length-3; i++){
+            list.add(ColorChangeUtil.province_datas[i]);
         }
         adapter = new provinceAdapter(this, list);
         province_listview.setAdapter(adapter);
@@ -85,16 +85,16 @@ public class MainActivity extends AppCompatActivity {
         changeType.setFocusable(true);
         changeType.setFocusableInTouchMode(true);
         //changeType.setVisibility(View.GONE);
-        changeType.setText(ColorChangeHelp.nameStrings[0]);
+        changeType.setText(ColorChangeUtil.nameStrings[0]);
     }
     /**
      * 设置颜色渐变条
      */
     private void setColorView() {
         colorView_hashmap = new HashMap<>();
-        for (int i = 0; i < ColorChangeHelp.nameStrings.length; i++) {
-            String colors[] = ColorChangeHelp.colorStrings[i].split(",");
-            String texts[] = ColorChangeHelp.textStrings[i].split(",");
+        for (int i = 0; i < ColorChangeUtil.nameStrings.length; i++) {
+            String colors[] = ColorChangeUtil.colorStrings[i].split(",");
+            String texts[] = ColorChangeUtil.textStrings[i].split(",");
             List<MycolorArea> list = new ArrayList<>();
             for (int j = 0; j < colors.length; j++) {
                 MycolorArea c = new MycolorArea();
@@ -102,9 +102,9 @@ public class MainActivity extends AppCompatActivity {
                 c.setText(texts[j]);
                 list.add(c);
             }
-            colorView_hashmap.put(ColorChangeHelp.nameStrings[i], list);
+            colorView_hashmap.put(ColorChangeUtil.nameStrings[i], list);
         }
-        colorView.setList(colorView_hashmap.get(ColorChangeHelp.nameStrings[0]));
+        colorView.setList(colorView_hashmap.get(ColorChangeUtil.nameStrings[0]));
     }
 
     private void initMap() {
