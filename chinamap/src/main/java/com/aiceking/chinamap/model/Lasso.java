@@ -1,4 +1,4 @@
-package com.aiceking.chinamap.old;
+package com.aiceking.chinamap.model;
 
 import android.graphics.PointF;
 

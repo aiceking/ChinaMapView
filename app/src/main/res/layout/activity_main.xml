@@ -6,19 +6,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     >
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/changeType"
                 android:text=""/>
-            <com.aiceking.chinamap.old.ChinaMapView
+            <com.aiceking.chinamap.view.ChinaMapView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
@@ -73,13 +67,11 @@
                     android:gravity="center"
                     android:layout_weight="1"/>
             </LinearLayout>
-            <com.aiceking.chinamapview.MyListView
+            <ListView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/province_listview">
 
-            </com.aiceking.chinamapview.MyListView>
-        </LinearLayout>
-    </ScrollView>
+            </ListView>
 
 </LinearLayout>

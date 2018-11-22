@@ -5,13 +5,14 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 
+import com.aiceking.chinamap.model.ChinaMapModel;
 import com.aiceking.chinamap.old.ColorChangeHelp;
 import com.aiceking.chinamap.old.ColorView;
-import com.aiceking.chinamap.old.MyMap;
-import com.aiceking.chinamap.old.ChinaMapView;
+import com.aiceking.chinamap.util.SvgUtil;
+import com.aiceking.chinamap.view.ChinaMapView;
 import com.aiceking.chinamap.old.MycolorArea;
-import com.aiceking.chinamap.old.SvgUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,11 +21,11 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     private ChinaMapView mapview;
     private provinceAdapter adapter;
-    private MyMap myMap;
+    private ChinaMapModel myMap;
     private Button changeType;
     private ColorView colorView;
     private int currentColor = 0;
-    private MyListView province_listview;
+    private ListView province_listview;
     private HashMap<String, List<MycolorArea>> colorView_hashmap;
     private List<String> list;
     @Override
@@ -77,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        province_listview = (MyListView) findViewById(R.id.province_listview);
+        province_listview = (ListView) findViewById(R.id.province_listview);
         mapview = (ChinaMapView) findViewById(R.id.view);
         colorView = (ColorView) findViewById(R.id.colorView);
         changeType = (Button) findViewById(R.id.changeType);

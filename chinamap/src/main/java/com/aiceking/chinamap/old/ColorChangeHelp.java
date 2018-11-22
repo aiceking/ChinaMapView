@@ -4,6 +4,9 @@ import android.graphics.Color;
 import android.util.Log;
 
 
+import com.aiceking.chinamap.model.ChinaMapModel;
+import com.aiceking.chinamap.model.ProvinceModel;
+
 import java.util.HashMap;
 
 /**
@@ -55,7 +58,7 @@ public static String province_datas[]={"北京市_17.58_6.87_427_1435","天津�
             "400~,500~,600~,700~," +
                     "800~,900~,1000~,1100~,1200~,1300~,"};
     public static String nameStrings[] = {"发电量增长率", "累计增长率","发电利用小时" ,"累计利用小时"};
-    public static void changeMapColors(MyMap mymap,String type){
+    public static void changeMapColors(ChinaMapModel mymap, String type){
             if (hashmap==null){
              hashmap=new HashMap();
              for (int i=0;i<province_datas.length;i++){
@@ -79,8 +82,8 @@ public static String province_datas[]={"北京市_17.58_6.87_427_1435","天津�
 
     }
     //最小值，之间间隔，type
-    public static void getMapColors(MyMap mymap,float min,float average,int type){
-        for (Province p:mymap.getProvinceslist()){
+    public static void getMapColors(ChinaMapModel mymap,float min,float average,int type){
+        for (ProvinceModel p:mymap.getProvinceslist()){
             if (hashmap.containsKey(p.getName())){
                 if (hashmap.get(p.getName())!=null){
                     float a=Float.parseFloat( hashmap.get(p.getName()).split("_")[type+1]);

@@ -1,19 +1,23 @@
-package com.aiceking.chinamap.old;
+package com.aiceking.chinamap.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
+import android.graphics.EmbossMaskFilter;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PathMeasure;
 import android.graphics.PointF;
-import android.graphics.RectF;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
 import com.aiceking.chinamap.gesture.ScrollScaleGestureDetector;
+import com.aiceking.chinamap.model.ChinaMapModel;
+import com.aiceking.chinamap.model.Lasso;
+import com.aiceking.chinamap.model.ProvinceModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,15 +30,15 @@ public class ChinaMapView extends View{
     private Paint innerPaint,outerPaint;//画省份的内部画笔和外圈画笔
     private boolean isFirst; //是否是第一次绘制,用于最初的适配
     private ScrollScaleGestureDetector scrollScaleGestureDetector;//自定义的缩放拖拽手势帮助类
-    private MyMap map;
+    private ChinaMapModel map;
     private float map_scale=0;
     private ScrollScaleGestureDetector.OnScrollScaleGestureListener onScrollScaleGestureListener=new ScrollScaleGestureDetector.OnScrollScaleGestureListener() {
         @Override
         public void onClick(float x, float y) {
-            for (Province province:map.getProvinceslist()){
+            for (ProvinceModel province:map.getProvinceslist()){
                 province.setLinecolor(Color.GRAY);
             }
-            for (Province p:map.getProvinceslist()){
+            for (ProvinceModel p:map.getProvinceslist()){
                 for (Lasso lasso:p.getPathLasso()){
                     if (lasso.contains(x, y)){
                         //p.setColor(Color.RED);
@@ -60,12 +64,26 @@ public class ChinaMapView extends View{
         innerPaint=new Paint();
         innerPaint.setColor(Color.BLUE);
         innerPaint.setAntiAlias(true);
+        innerPaint.setDither(true);
         outerPaint=new Paint();
         outerPaint.setColor(Color.GRAY);
         outerPaint.setAntiAlias(true);
         outerPaint.setStrokeWidth(1);
         outerPaint.setStyle(Paint.Style.STROKE);
+        outerPaint.setDither(true);
+        // 设置光源的方向
+        float[] direction = new float[]{ 1, 1, 1 };
+        //设置环境光亮度
+        float light = 0.4f;
+        // 选择要应用的反射等级
+        float specular = 6;
+        // 向mask应用一定级别的模糊
+        float blur = 3.5f;
+        EmbossMaskFilter emboss=new EmbossMaskFilter(direction,light,specular,blur);
+        //浮雕效果
+        outerPaint.setMaskFilter(emboss);
         scrollScaleGestureDetector=new ScrollScaleGestureDetector(this,onScrollScaleGestureListener);
+
     }
     public ChinaMapView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -88,7 +106,7 @@ public class ChinaMapView extends View{
         setMeasuredDimension(width, height);
     }
 
-    public void setMap(MyMap map){
+    public void setMap(ChinaMapModel map){
         this.map=map;
         isFirst=true;
         invalidate();
@@ -150,7 +168,7 @@ public class ChinaMapView extends View{
         map.setMin_x(map.getMin_x()*scale);
         map.setMax_y(map.getMax_y()*scale);
         map.setMin_y(map.getMin_y()*scale);
-            for (Province province:map.getProvinceslist()){
+            for (ProvinceModel province:map.getProvinceslist()){
                 innerPaint.setColor(province.getColor());
                 List<Lasso> listLasso=new ArrayList<>();
                 List<Path> pathList=new ArrayList<>();

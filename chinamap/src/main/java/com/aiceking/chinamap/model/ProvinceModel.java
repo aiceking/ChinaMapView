@@ -34,6 +34,13 @@ public class ProvinceModel {
     public void setPathRegion(List<Region> regionList) {
         this.regionList = regionList;
     }
+    private List<Lasso> pathLasso;
+    public List<Lasso> getPathLasso() {
+        return pathLasso;
+    }
+    public void setPathLasso(List<Lasso> pathLasso) {
+        this.pathLasso = pathLasso;
+    }
     private int color;
     public int getColor() {
         return color;

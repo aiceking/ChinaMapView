@@ -146,7 +146,6 @@ public class ScrollScaleGestureDetector {
                 if (rectF.bottom<=view.getHeight()/2){
                     myMatrix.postTranslate(0,view.getHeight()/2-rectF.bottom);
                 }
-
                 view.invalidate();
                 beforeLength = afterLength;
             }
