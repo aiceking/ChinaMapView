@@ -10,7 +10,10 @@ import android.graphics.PathMeasure;
 import android.graphics.PointF;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.graphics.RectF;
+import android.graphics.Region;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -32,24 +35,28 @@ public class ChinaMapView extends View{
     private ScrollScaleGestureDetector scrollScaleGestureDetector;//自定义的缩放拖拽手势帮助类
     private ChinaMapModel map;
     private float map_scale=0;
+    private int selectPosition;
     private ScrollScaleGestureDetector.OnScrollScaleGestureListener onScrollScaleGestureListener=new ScrollScaleGestureDetector.OnScrollScaleGestureListener() {
         @Override
         public void onClick(float x, float y) {
-            for (ProvinceModel province:map.getProvinceslist()){
-                province.setLinecolor(Color.GRAY);
-            }
+            //只有点击在某一个省份内才会触发省份选择接口
             for (ProvinceModel p:map.getProvinceslist()){
-                for (Lasso lasso:p.getPathLasso()){
-                    if (lasso.contains(x, y)){
-                        //p.setColor(Color.RED);
+                for (Region region:p.getRegionList()){
+                    if (region.contains((int)x, (int)y)){
+                        //重置上一次选中省份的状态
+                        map.getProvinceslist().get(selectPosition).setSelect(false);
+                        map.getProvinceslist().get(selectPosition).setLinecolor(Color.GRAY);
+                        //设置新的选中的省份
+                        p.setSelect(true);
                         p.setLinecolor(Color.BLACK);
+                        //暴露到Activity中的接口，把省的名字传过去
                         onProvinceClickLisener.onChose(p.getName());
                         invalidate();
-                        //暴露到Activity中的接口，把省的名字传过去
                         return;
                     }
                 }
-            }
+                }
+
         }
     };
     private onProvinceClickLisener onProvinceClickLisener;
@@ -59,31 +66,21 @@ public class ChinaMapView extends View{
     public void setOnChoseProvince(onProvinceClickLisener lisener){
         this.onProvinceClickLisener=lisener;
     }
+    //初始化准备工作
     public ChinaMapView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        //初始化省份内部画笔
         innerPaint=new Paint();
         innerPaint.setColor(Color.BLUE);
         innerPaint.setAntiAlias(true);
-        innerPaint.setDither(true);
+        //初始化省份外框画笔
         outerPaint=new Paint();
         outerPaint.setColor(Color.GRAY);
         outerPaint.setAntiAlias(true);
         outerPaint.setStrokeWidth(1);
         outerPaint.setStyle(Paint.Style.STROKE);
-        outerPaint.setDither(true);
-        // 设置光源的方向
-        float[] direction = new float[]{ 1, 1, 1 };
-        //设置环境光亮度
-        float light = 0.4f;
-        // 选择要应用的反射等级
-        float specular = 6;
-        // 向mask应用一定级别的模糊
-        float blur = 3.5f;
-        EmbossMaskFilter emboss=new EmbossMaskFilter(direction,light,specular,blur);
-        //浮雕效果
-        outerPaint.setMaskFilter(emboss);
+        //初始化手势帮助类
         scrollScaleGestureDetector=new ScrollScaleGestureDetector(this,onScrollScaleGestureListener);
-
     }
     public ChinaMapView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -98,6 +95,7 @@ public class ChinaMapView extends View{
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        //不管高度的设置Mode是什么，直接把View的高度按照宽度适配的缩放倍数进行适配
         int width=MeasureSpec.getSize(widthMeasureSpec);
         if (map!=null){
             map_scale=width/map.getMax_x();
@@ -116,29 +114,36 @@ public class ChinaMapView extends View{
     }
     @Override
     protected void onDraw(Canvas canvas) {
+        //保证只在初次绘制的时候进行缩放适配
         if (isFirst){
         viewWidth=getWidth()-getPaddingLeft()-getPaddingRight();
         //首先重置所有点的坐标，使得map适应屏幕大小
             if (map!=null){
                 map_scale=viewWidth/map.getMax_x();
             }
+            //缩放所有Path
             scalePoints(canvas,map_scale);
             isFirst=false;
         }else{
+            //关联缩放和平移后的矩阵
             scrollScaleGestureDetector.connect(canvas);
-            scrollScaleGestureDetector.setScaleMax(3);
-            scrollScaleGestureDetector.setScalemin(1);
+            scrollScaleGestureDetector.setScaleMax(3);//最大缩放倍数
+            scrollScaleGestureDetector.setScalemin(1);//最小缩放倍数
+            //绘制Map
             drawMap(canvas);
         }
         super.onDraw(canvas);
     }
+//绘制整个Map
     private void drawMap(Canvas canvas) {
         if (map.getProvinceslist().size()>0){
-            int b=0;
+            outerPaint.setStrokeWidth(1);
+            //首先记录下点击的省份的下标，先把其他的省份绘制完，
             for (int i=0;i<map.getProvinceslist().size();i++){
-                if (map.getProvinceslist().get(i).getLinecolor()==Color.BLACK){
-                    b=i;
+                if (map.getProvinceslist().get(i).isSelect()){
+                    selectPosition=i;
                 }else{
+                    //此时绘制其他省份，边框画笔的宽度为1
                     innerPaint.setColor(map.getProvinceslist().get(i).getColor());
                     outerPaint.setColor(map.getProvinceslist().get(i).getLinecolor());
                     for (Path p:map.getProvinceslist().get(i).getListpath()){
@@ -147,9 +152,11 @@ public class ChinaMapView extends View{
                     }
                 }
             }
-            innerPaint.setColor(map.getProvinceslist().get(b).getColor());
-            outerPaint.setColor(map.getProvinceslist().get(b).getLinecolor());
-            for (Path p:map.getProvinceslist().get(b).getListpath()){
+            //再绘制点击所在的省份,此时画笔宽度设为2.5，以达到着重显示的效果
+            innerPaint.setColor(map.getProvinceslist().get(selectPosition).getColor());
+            outerPaint.setColor(map.getProvinceslist().get(selectPosition).getLinecolor());
+            outerPaint.setStrokeWidth(2.5f);
+            for (Path p:map.getProvinceslist().get(selectPosition).getListpath()){
                 canvas.drawPath(p, innerPaint);
                 canvas.drawPath(p, outerPaint);
             }
@@ -170,31 +177,32 @@ public class ChinaMapView extends View{
         map.setMin_y(map.getMin_y()*scale);
             for (ProvinceModel province:map.getProvinceslist()){
                 innerPaint.setColor(province.getColor());
-                List<Lasso> listLasso=new ArrayList<>();
+                List<Region> regionList=new ArrayList<>();
                 List<Path> pathList=new ArrayList<>();
                 for (Path p:province.getListpath()){
                     //遍历Path中的所有点，重置点的坐标
-                    Path newpath=resetPath(p, scale, listLasso);
+                    Path newpath=resetPath(p, scale, regionList);
                     pathList.add(newpath);
                     canvas.drawPath(newpath,innerPaint);
                     canvas.drawPath(newpath,outerPaint);
                 }
                     province.setListpath(pathList);
-                //拿到path转换之后的Lasso对象，用来点击的是哪个省份,即判断点是否在path画出的区域内
-                province.setPathLasso(listLasso);
+                //判断点是否在path画出的区域内
+                province.setRegionList(regionList);
             }
     }
-    private Path resetPath(Path path,float scale,List<Lasso> listLasso) {
+
+    private Path resetPath(Path path,float scale,List<Region> regionList) {
         List<PointF> list=new ArrayList<>();
         PathMeasure pathmesure=new PathMeasure(path,true);
         float[] s=new float[2];
+        //按照缩放倍数重置Path内的所有点
         for (int i=0;i<pathmesure.getLength();i=i+2) {
             pathmesure.getPosTan(i, s, null);
             PointF p=new PointF(s[0]*scale,s[1]*scale);
             list.add(p);
         }
-        Lasso lasso=new Lasso(list);
-        listLasso.add(lasso);
+        //重绘缩放后的Path
         Path path1=new Path();
         for (int i=0;i<list.size();i++){
             if (i==0){
@@ -204,8 +212,15 @@ public class ChinaMapView extends View{
             }
         }
         path1.close();
+        //构造Path对应的Region,用于判断点击的点是否在Path内
+        RectF rf=new RectF();
+        Region re=new Region();
+        path1.computeBounds(rf,true);
+        re.setPath(path1,new Region((int)rf.left,(int)rf.top,(int)rf.right,(int)rf.bottom));
+        regionList.add(re);
         return path1;
     }
+    //选中所点击的省份
     public interface onProvinceClickLisener{
         public void onChose(String provincename);
     }

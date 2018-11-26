@@ -10,8 +10,25 @@ import java.util.List;
  */
 public class ProvinceModel {
     private String name;
-    private List<Path> listpath;
+    private int color;
     private int linecolor;
+    private List<Path> listpath;
+    private List<Region> regionList;
+    private boolean isSelect;
+    public boolean isSelect() {
+        return isSelect;
+    }
+    public void setSelect(boolean select) {
+        isSelect = select;
+    }
+
+    public List<Region> getRegionList() {
+        return regionList;
+    }
+
+    public void setRegionList(List<Region> regionList) {
+        this.regionList = regionList;
+    }
 
     public int getLinecolor() {
         return linecolor;
@@ -27,21 +44,6 @@ public class ProvinceModel {
     public void setListpath(List<Path> listpath) {
         this.listpath = listpath;
     }
-    private List<Region> regionList;
-    public List<Region> getPathRegion() {
-        return regionList;
-    }
-    public void setPathRegion(List<Region> regionList) {
-        this.regionList = regionList;
-    }
-    private List<Lasso> pathLasso;
-    public List<Lasso> getPathLasso() {
-        return pathLasso;
-    }
-    public void setPathLasso(List<Lasso> pathLasso) {
-        this.pathLasso = pathLasso;
-    }
-    private int color;
     public int getColor() {
         return color;
     }
