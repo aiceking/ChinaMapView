@@ -95,6 +95,7 @@ public class ChinaMapView extends View{
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        Log.v("xixi=","onMeasure");
         //不管高度的设置Mode是什么，直接把View的高度按照宽度适配的缩放倍数进行适配
         int width=MeasureSpec.getSize(widthMeasureSpec);
         if (map!=null){
@@ -107,7 +108,7 @@ public class ChinaMapView extends View{
     public void setMap(ChinaMapModel map){
         this.map=map;
         isFirst=true;
-        invalidate();
+        requestLayout();
     }
     public void chingeMapColors(){
         invalidate();
@@ -162,6 +163,39 @@ public class ChinaMapView extends View{
             }
         }
     }
+//    private void drawMap(Canvas canvas) {
+//        if (map.getProvinceslist().size()>0){
+//            outerPaint.setStrokeWidth(1);
+//            //首先记录下点击的省份的下标，先把其他的省份绘制完，
+//            for (int i=0;i<map.getProvinceslist().size();i++){
+//                if (map.getProvinceslist().get(i).isSelect()){
+//                    outerPaint.setStrokeWidth(2.5f);
+//                    outerPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+//                    selectPosition=i;
+//                }else{
+//                    outerPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OVER));
+//                    outerPaint.setXfermode(null);
+//                    outerPaint.setStrokeWidth(1);
+//                    //此时绘制其他省份，边框画笔的宽度为1
+//                    outerPaint.setXfermode(null);
+//                }
+//                innerPaint.setColor(map.getProvinceslist().get(i).getColor());
+//                outerPaint.setColor(map.getProvinceslist().get(i).getLinecolor());
+//                for (Path p:map.getProvinceslist().get(i).getListpath()){
+//                    canvas.drawPath(p, innerPaint);
+//                    canvas.drawPath(p, outerPaint);
+//                }
+//            }
+//            //再绘制点击所在的省份,此时画笔宽度设为2.5，以达到着重显示的效果
+//            innerPaint.setColor(map.getProvinceslist().get(selectPosition).getColor());
+//            outerPaint.setColor(map.getProvinceslist().get(selectPosition).getLinecolor());
+//            outerPaint.setStrokeWidth(2.5f);
+//            for (Path p:map.getProvinceslist().get(selectPosition).getListpath()){
+//                canvas.drawPath(p, innerPaint);
+//                canvas.drawPath(p, outerPaint);
+//            }
+//        }
+//    }
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         return scrollScaleGestureDetector.onTouchEvent(event);

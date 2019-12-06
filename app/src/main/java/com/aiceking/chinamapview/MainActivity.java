@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.aiceking.chinamap.model.ChinaMapModel;
 import com.aiceking.chinamapview.util.ColorChangeUtil;
@@ -37,11 +38,11 @@ public class MainActivity extends AppCompatActivity {
         setColorView();
         //初始化map
         initMap();
-        //初始化map各省份颜色
-        ColorChangeUtil.changeMapColors(myMap, ColorChangeUtil.nameStrings[0]);
-        mapview.chingeMapColors();
-        //listview
-        setListAdapter();
+//        //初始化map各省份颜色
+//        ColorChangeUtil.changeMapColors(myMap, ColorChangeUtil.nameStrings[0]);
+//        mapview.chingeMapColors();
+//        //listview
+//        setListAdapter();
         changeType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -56,14 +57,15 @@ public class MainActivity extends AppCompatActivity {
         mapview.setOnChoseProvince(new ChinaMapView.onProvinceClickLisener() {
             @Override
             public void onChose(String provincename) {
+                Toast.makeText(MainActivity.this, provincename, Toast.LENGTH_SHORT).show();
                 //地图点击省份回调接口，listview滚动到相应省份位置
-                for (int i = 0; i < list.size(); i++) {
-                    if (list.get(i).contains(provincename)) {
-                        adapter.setPosition(i);
-                        province_listview.setSelection(i);
-                        break;
-                    }
-                }
+//                for (int i = 0; i < list.size(); i++) {
+//                    if (list.get(i).contains(provincename)) {
+//                        adapter.setPosition(i);
+//                        province_listview.setSelection(i);
+//                        break;
+//                    }
+//                }
             }
         });
     }
@@ -84,7 +86,6 @@ public class MainActivity extends AppCompatActivity {
         changeType = (Button) findViewById(R.id.changeType);
         changeType.setFocusable(true);
         changeType.setFocusableInTouchMode(true);
-        //changeType.setVisibility(View.GONE);
         changeType.setText(ColorChangeUtil.nameStrings[0]);
     }
     /**
@@ -110,7 +111,6 @@ public class MainActivity extends AppCompatActivity {
     private void initMap() {
         //拿到SVG文件，解析成对象
         myMap = new SvgUtil(this).getProvinces();
-
         //传数据
         mapview.setMap(myMap);
     }
