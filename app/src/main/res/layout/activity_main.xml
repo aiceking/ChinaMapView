@@ -1,27 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    >
-
+    tools:context=".MainActivity">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/changeType"
+                android:id="@+id/btn_change"
                 android:text=""/>
-            <com.aiceking.chinamap.view.ChinaMapView
+            <com.wxy.chinamapview.view.ChinaMapView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:id="@+id/view"
+                android:id="@+id/chinamap_view"
                 />
-            <com.aiceking.chinamap.view.ColorView
+            <com.aice.chinamapview.view.ColorView
                 android:layout_width="match_parent"
                 android:layout_height="33dp"
-                android:id="@+id/colorView"/>
+                android:id="@+id/color_view"></com.aice.chinamapview.view.ColorView>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
@@ -67,11 +72,14 @@
                     android:gravity="center"
                     android:layout_weight="1"/>
             </LinearLayout>
-            <ListView
+            <com.aice.chinamapview.view.MyListView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/province_listview">
+                android:id="@+id/lv_province">
 
-            </ListView>
+            </com.aice.chinamapview.view.MyListView>
+        </LinearLayout>
+    </ScrollView>
+
 
 </LinearLayout>
