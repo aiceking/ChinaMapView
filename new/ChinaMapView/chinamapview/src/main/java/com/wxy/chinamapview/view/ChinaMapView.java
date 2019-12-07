@@ -18,6 +18,7 @@ import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewConfiguration;
 
+import com.wxy.chinamapview.gesture.MyGestureDector;
 import com.wxy.chinamapview.gesture.MyScaleGestureDetector;
 import com.wxy.chinamapview.gesture.ScrollScaleGestureDetector;
 import com.wxy.chinamapview.model.ChinaMapModel;
@@ -36,17 +37,19 @@ public class ChinaMapView extends View {
     private Paint innerPaint,outerPaint;//画省份的内部画笔和外圈画笔
     private boolean isFirst; //是否是第一次绘制,用于最初的适配
     private ChinaMapModel chinaMapModel;
+    private float[] matrixValues = new float[9];
     private int viewWidth;
     private int viewHeight;
-    private   int DEFUALT_VIEW_WIDTH=400;//设置默认的宽
+    private int mapWidth,mapHeight;//map初始宽度和高度
+    private   int DEFUALT_VIEW_WIDTH=1200;//设置默认的宽
     private float map_scale;//初始适配缩放值
     private int selectPosition=-1;
     private int scaleMax=2;//缩放的最大倍数
     private int scaleMin=1;//缩放的最小倍数
     private Matrix myMatrix;    //用来完成缩放
-    private boolean isTouchSlop;
     private ScrollScaleGestureDetector scrollScaleGestureDetector;//自定义的缩放拖拽手势帮助类
     private onProvinceClickLisener onProvinceClickLisener;//省份点击回调
+    private MyGestureDector myGestureDector;//拖动惯性滑动点击帮助类
     private ScrollScaleGestureDetector.OnScrollScaleGestureListener onScrollScaleGestureListener=new ScrollScaleGestureDetector.OnScrollScaleGestureListener() {
         @Override
         public void onClick(float x, float y) {
@@ -62,7 +65,7 @@ public class ChinaMapView extends View {
                         p.setSelect(true);
                         //暴露到Activity中的接口，把省的名字传过去
                         if (onProvinceClickLisener!=null){
-                        onProvinceClickLisener.onSelectProvince(p);
+                        onProvinceClickLisener.onSelectProvince(p.getName());
                         }
                         invalidate();
                         return;
@@ -114,9 +117,15 @@ public class ChinaMapView extends View {
         scaleGestureDetector=new MyScaleGestureDetector(context,new MyScaleGestureDetector.OnScaleGestureListener(){
             @Override
             public boolean onScale(MyScaleGestureDetector detector) {
-                        float yFactor = detector.getScaleFactor();
-            myMatrix.postScale(yFactor,yFactor,detector.getFocusX(),detector.getFocusY());
-            invalidate();
+                float scale = getScale();
+                float yFactor = detector.getScaleFactor();
+                        if (yFactor * scale < scaleMin){
+                            yFactor = scaleMin / scale;}
+                        if (yFactor * scale > scaleMax){
+                            yFactor = scaleMax / scale;}
+                myMatrix.postScale(yFactor, yFactor, detector.getFocusX(), detector.getFocusY());
+                resetTranslate();
+                invalidate();
                 return true;
             }
             @Override
@@ -138,7 +147,6 @@ public class ChinaMapView extends View {
                 Log.v("xixi=","onDown");
                 return true;
             }
-
             @Override
             public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
                 Log.v("xixi=","onScroll="+distanceX);
@@ -151,10 +159,68 @@ public class ChinaMapView extends View {
             public void onLongPress(MotionEvent e) {
                 super.onLongPress(e);
             }
-        }){
-
-        };
+        });
+        myGestureDector=new MyGestureDector(context,this, myMatrix, new MyGestureDector.OnGestureClickListener() {
+            @Override
+            public void onClick(int x, int y) {
+                //只有点击在某一个省份内才会触发省份选择接口
+                for (ProvinceModel p:chinaMapModel.getProvinceslist()){
+                    for (Region region:p.getRegionList()){
+                        if (region.contains((int)x, (int)y)){
+                            //重置上一次选中省份的状态
+                            if (selectPosition!=-1)
+                            chinaMapModel.getProvinceslist().get(selectPosition).setSelect(false);
+                            //设置新的选中的省份
+                            p.setSelect(true);
+                            //暴露到Activity中的接口，把省的名字传过去
+                            onProvinceClickLisener.onSelectProvince(p.getName());
+                            invalidate();
+                            return;
+                        }
+                    }
+                }
+            }
+        });
     }
+    //重置因缩放导致的边界越界
+    private void resetTranslate() {
+        if (mapHeight!=0&&mapWidth!=0&&viewHeight!=0&&viewWidth!=0){
+            RectF rectF=getMatrixRectF();
+            //其实，因为精度问题，只会有这两种情况，(float)viewWidth/(float)viewHeight和(float)mapWidth/(float)mapHeight始终不相等。
+            //即view的长宽比和map缩放后的长宽比基本一致的情况，按照下面任何一种情况都可以处理
+            // (float)viewWidth/(float)viewHeight+"="+(float)mapWidth/(float)mapHeight);
+            float dx=0,dy=0;
+            if ((float)viewWidth/(float)viewHeight<(float)mapWidth/(float)mapHeight){
+                if (rectF.left>=viewWidth/2){
+                    dx=viewWidth/2-rectF.left;
+                }
+                if (rectF.right<=viewWidth/2){
+                    dx=viewWidth/2-rectF.right;
+                }
+                if (rectF.bottom<=viewHeight-mapHeight/2){
+                    dy=viewHeight-mapHeight/2-rectF.bottom;
+                }
+                if (rectF.top>=viewHeight-mapHeight/2){
+                    dy=viewHeight-mapHeight/2-rectF.top;
+                }
+            }else  {
+                if (rectF.top>=viewHeight/2){
+                    dy=viewHeight/2-rectF.top;
+                }
+                if (rectF.bottom<=viewHeight/2){
+                    dy=viewHeight/2-rectF.bottom;
+                }
+                if (rectF.left>=viewWidth-mapWidth/2){
+                    dx=viewWidth-mapWidth/2-rectF.left;
+                }
+                if (rectF.right<=viewWidth-mapWidth/2){
+                    dx=viewWidth-mapWidth/2-rectF.right;
+                }
+            }
+            myMatrix.postTranslate(dx,dy);
+        }
+    }
+
     //设置最大缩放倍数，最小为1
     public void setScaleMax(int scaleMax) {
         if (scaleMax<=1){
@@ -163,7 +229,6 @@ public class ChinaMapView extends View {
             this.scaleMax=scaleMax;
         }
         scrollScaleGestureDetector.setScaleMax(this.scaleMax);//最大缩放倍数
-
     }
     //设置最小缩放倍数，最小为0
     public void setScaleMin(int scaleMin) {
@@ -185,7 +250,7 @@ public class ChinaMapView extends View {
             switch (width_specMode){
                 //宽度精确值
                 case MeasureSpec.EXACTLY:
-                        map_scale=MeasureSpec.getSize(widthMeasureSpec)/(chinaMapModel.getMaxX()-chinaMapModel.getMinX());
+                        map_scale=(float) MeasureSpec.getSize(widthMeasureSpec)/(chinaMapModel.getMaxX()-chinaMapModel.getMinX());
                     switch (height_specMode){
                         //高度精确值
                         case MeasureSpec.EXACTLY:
@@ -195,7 +260,11 @@ public class ChinaMapView extends View {
                         case MeasureSpec.AT_MOST:
                         case MeasureSpec.UNSPECIFIED:
                             width= MeasureSpec.getSize(widthMeasureSpec);
-                            height=Math.min((int) ((chinaMapModel.getMaxY()-chinaMapModel.getMinY())*map_scale),getDefaultSize(getSuggestedMinimumHeight(), heightMeasureSpec));
+                            if ( getDefaultSize(getSuggestedMinimumHeight(), heightMeasureSpec)!=0) {
+                                height = Math.min((int) ((chinaMapModel.getMaxY() - chinaMapModel.getMinY()) * map_scale), getDefaultSize(getSuggestedMinimumHeight(), heightMeasureSpec));
+                            }else {
+                                height =(int) ((chinaMapModel.getMaxY() - chinaMapModel.getMinY()) * map_scale);
+                            }
                             break;
                     }
                     break;
@@ -205,16 +274,19 @@ public class ChinaMapView extends View {
                     switch (height_specMode){
                         //高度精确值
                         case MeasureSpec.EXACTLY:
-                            map_scale=MeasureSpec.getSize(heightMeasureSpec)/(chinaMapModel.getMaxY()-chinaMapModel.getMinY());
+                            map_scale=(float)MeasureSpec.getSize(heightMeasureSpec)/(chinaMapModel.getMaxY()-chinaMapModel.getMinY());
                             height= MeasureSpec.getSize(heightMeasureSpec);
-                            width=Math.min((int) ((chinaMapModel.getMaxX()-chinaMapModel.getMinX())*map_scale),getDefaultSize(getSuggestedMinimumWidth(), widthMeasureSpec));
+                            if (getDefaultSize(getSuggestedMinimumWidth(), widthMeasureSpec)!=0) {
+                                width = Math.min((int) ((chinaMapModel.getMaxX() - chinaMapModel.getMinX()) * map_scale), getDefaultSize(getSuggestedMinimumWidth(), widthMeasureSpec));
+                            }else {
+                                width =(int) (chinaMapModel.getMaxX() - chinaMapModel.getMinX());
+                            }
                             break;
                         case MeasureSpec.AT_MOST:
                         case MeasureSpec.UNSPECIFIED:
                             width=DEFUALT_VIEW_WIDTH;
                             map_scale=width/(chinaMapModel.getMaxX()-chinaMapModel.getMinX());
                             height= (int) ((chinaMapModel.getMaxY()-chinaMapModel.getMinY())*map_scale);
-
                             break;
                     }
                     break;
@@ -229,9 +301,10 @@ public class ChinaMapView extends View {
         if (chinaMapModel==null)return;
         //保证只在初次绘制的时候进行缩放适配
         if (isFirst){
-            isFirst=false;
-            viewWidth=getWidth()-getPaddingLeft()-getPaddingRight();
-            viewHeight=getHeight()-getPaddingTop()-getPaddingBottom();
+            viewWidth=getWidth();
+            viewHeight=getHeight();
+            //提供给滑动帮助类，以便控制滑动边界
+            myGestureDector.setViewWidthAndHeight(viewWidth,viewHeight);
             //首先重置所有点的坐标，使得map适应屏幕大小
             if ((float)viewWidth/(float)viewHeight>(chinaMapModel.getMaxX()-chinaMapModel.getMinX())/(chinaMapModel.getMaxY()-
                     chinaMapModel.getMinY())){
@@ -241,6 +314,8 @@ public class ChinaMapView extends View {
             }
             //缩放所有Path
             scalePoints(canvas,map_scale);
+            isFirst=false;
+
         }else {
             //关联缩放和平移后的矩阵
             canvas.concat(myMatrix);
@@ -248,13 +323,25 @@ public class ChinaMapView extends View {
         }
     }
     @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        getParent().requestDisallowInterceptTouchEvent(true);
+        return super.dispatchTouchEvent(event);
+    }
+    @Override
     public boolean onTouchEvent(MotionEvent event) {
          scaleGestureDetector.onTouchEvent(event);
         if (!scaleGestureDetector.isInProgress()) {
-             gestureDetector.onTouchEvent(event);
+            myGestureDector.onTouchEvent(event);
         }
         return true;
     }
+
+    @Override
+    public void computeScroll() {
+        super.computeScroll();
+        myGestureDector.computeScroll();
+    }
+
     private void drawMap(Canvas canvas) {
         if (chinaMapModel.getProvinceslist().size()>0){
             outerPaint.setStrokeWidth(1);
@@ -292,6 +379,11 @@ public class ChinaMapView extends View {
         chinaMapModel.setMinX(chinaMapModel.getMinX()*scale);
         chinaMapModel.setMaxY(chinaMapModel.getMaxY()*scale);
         chinaMapModel.setMinY(chinaMapModel.getMinY()*scale);
+        //为滑动手势设置边界
+        mapWidth=(int)( chinaMapModel.getMaxX()-chinaMapModel.getMinX());
+        mapHeight=(int)(chinaMapModel.getMaxY()-chinaMapModel.getMinY());
+        myGestureDector.setMapWidthAndHeight(mapWidth,mapHeight);
+        //重设所有点
         for (ProvinceModel province:chinaMapModel.getProvinceslist()){
             innerPaint.setColor(province.getColor());
             List<Region> regionList=new ArrayList<>();
@@ -317,7 +409,7 @@ public class ChinaMapView extends View {
         //按照缩放倍数重置Path内的所有点
         for (int i=0;i<pathmesure.getLength();i=i+2) {
             pathmesure.getPosTan(i, s, null);
-            PointF p=new PointF(s[0]*scale+getPaddingLeft(),s[1]*scale+getPaddingTop());
+            PointF p=new PointF((int)s[0]*scale,(int)s[1]*scale);
             list.add(p);
         }
         //重绘缩放后的Path
@@ -340,6 +432,20 @@ public class ChinaMapView extends View {
     }
     //选中所点击的省份
     public interface onProvinceClickLisener{
-        public void onSelectProvince(ProvinceModel provinceModel);
+        public void onSelectProvince(String provinceName);
+    }
+    public  float getScale() {
+        myMatrix.getValues(matrixValues);
+        if (matrixValues[Matrix.MSCALE_X]==0){
+            return 1;
+        }else{
+            return matrixValues[Matrix.MSCALE_X];
+        }
+    }
+    private RectF getMatrixRectF() {
+        RectF rect = new RectF();
+        rect.set(0, 0, viewWidth, viewHeight);
+        myMatrix.mapRect(rect);
+        return rect;
     }
 }

@@ -90,9 +90,9 @@ public class MainActivity extends AppCompatActivity {
         chinamapView.setChinaMapModel(chinaMapModel);
         chinamapView.setOnProvinceClickLisener(new ChinaMapView.onProvinceClickLisener() {
             @Override
-            public void onSelectProvince(ProvinceModel provinceModel) {
+            public void onSelectProvince(String provinceName) {
                                 for (int i = 0; i < list.size(); i++) {
-                    if (list.get(i).contains(provinceModel.getName())) {
+                    if (list.get(i).contains(provinceName)) {
                         adapter.setPosition(i);
                         lvProvince.setSelection(i);
                         break;
