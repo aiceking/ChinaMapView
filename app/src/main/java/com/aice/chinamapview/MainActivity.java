@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     private void setListAdapter() {
         list=new ArrayList<>();
         //最后三个是香港，澳门和台湾，不需要
-        for (int i = 0; i< ColorChangeUtil.province_datas.length-3; i++){
+        for (int i = 0; i< ColorChangeUtil.province_datas.length; i++){
             list.add(ColorChangeUtil.province_datas[i]);
         }
         adapter = new ProvinceAdapter(this, list);

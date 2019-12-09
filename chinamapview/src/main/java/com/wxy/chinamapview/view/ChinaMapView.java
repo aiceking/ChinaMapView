@@ -44,7 +44,7 @@ public class ChinaMapView extends View {
     private int viewWidth;
     private int viewHeight;
     private int mapWidth,mapHeight;//map初始宽度和高度
-    private   int DEFUALT_VIEW_WIDTH=1200;//设置默认的宽
+    private   int DEFUALT_VIEW_WIDTH;//设置默认的宽
     private float map_scale;//初始适配缩放值
     private int selectPosition=-1;
     private int scaleMax=2;//缩放的最大倍数
@@ -120,6 +120,8 @@ public class ChinaMapView extends View {
         outerPaint.setAntiAlias(true);
         outerPaint.setStrokeWidth(1);
         outerPaint.setStyle(Paint.Style.STROKE);
+        //wrap宽度为屏幕宽度
+        DEFUALT_VIEW_WIDTH=context.getResources().getDisplayMetrics().widthPixels;
         //初始化手势帮助类
         myMatrix=new Matrix();
         scaleGestureDetector=new MyScaleGestureDetector(context,new MyScaleGestureDetector.OnScaleGestureListener(){
@@ -138,6 +140,7 @@ public class ChinaMapView extends View {
             }
             @Override
             public boolean onScaleBegin(MyScaleGestureDetector detector) {
+                getParent().requestDisallowInterceptTouchEvent(true);
                 return true;
             }
             @Override
@@ -153,10 +156,10 @@ public class ChinaMapView extends View {
                         if (region.contains((int)x, (int)y)){
                             //重置上一次选中省份的状态
                             if (selectPosition!=-1){
-                            chinaMapModel.getProvinceslist().get(selectPosition).setSelect(false);}
+                            chinaMapModel.getProvinceslist().get(selectPosition).setSelect(false);
+                            }
                             //设置新的选中的省份
                             p.setSelect(true);
-
                             invalidate();
                             return;
 
@@ -319,7 +322,6 @@ public class ChinaMapView extends View {
                 matrixValues[Matrix.MTRANS_X]=getWidth()*translateXRatio;
                 matrixValues[Matrix.MTRANS_Y]=getHeight()*translateYRatio;
                 myMatrix.setValues(matrixValues);
-                Log.v("xixi=",matrixValues[Matrix.MTRANS_X]+"="+matrixValues[Matrix.MTRANS_Y]);
                 isRestore="";
             }
             //关联缩放和平移后的矩阵
@@ -327,11 +329,26 @@ public class ChinaMapView extends View {
             drawMap(canvas);
         }
     }
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent event) {
-        getParent().requestDisallowInterceptTouchEvent(true);
-        return super.dispatchTouchEvent(event);
+
+    //用于事件拦截,是否消费事件
+    public boolean consumeEvent(MotionEvent event){
+        boolean consume=false;
+        RectF rectF=getMatrixRectF();
+        //把坐标换算到初始坐标系，用于判断点击坐标是否在某个省份内
+        PointF pf=new PointF((event.getX() -rectF.left)/getScale()
+                ,(event.getY() -rectF.top)/getScale());
+        for (ProvinceModel p:chinaMapModel.getProvinceslist()){
+            for (Region region:p.getRegionList()){
+                if (region.contains((int)pf.x, (int)pf.y)){
+                    consume=true;
+                    break;
+                }
+            }
+        }
+        return consume;
     }
+
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
          scaleGestureDetector.onTouchEvent(event);

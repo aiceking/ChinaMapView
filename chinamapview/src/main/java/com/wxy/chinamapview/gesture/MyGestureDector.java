@@ -4,31 +4,33 @@ import android.content.Context;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.graphics.Region;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.Scroller;
+
+import com.wxy.chinamapview.model.ProvinceModel;
+import com.wxy.chinamapview.view.ChinaMapView;
+
 public class MyGestureDector {
     private Context context;
-    protected Scroller scroller;
     private int mActivePointerId;
     protected float downX=0,downY=0;
     protected float mLastX = 0,mLastY=0;
     private float onMoveDownY ;	//移动的前一个Y坐标
     private float onMoveDownX ;	//移动的前一个X坐标
-    protected boolean isFling;
-    protected float scrollSideDamping=0.4f;
+    private boolean isConsume;
     private float[] matrixValues = new float[9];
     private  final int INVALID_POINTER = -1;
     private Matrix matrix;
-    private View view;//持有View用于重绘
+    private ChinaMapView view;//持有View用于重绘
     private OnGestureClickListener onGestureClickListener;
     private int mapWidth,mapHeight;//map初始宽度和高度
     private int viewWidth,viewHeight;//map初始宽度和高度
-    public MyGestureDector(Context context, View view,Matrix matrix,OnGestureClickListener onGestureClickListener){
-        scroller=new Scroller(context);
+    public MyGestureDector(Context context, ChinaMapView view,Matrix matrix,OnGestureClickListener onGestureClickListener){
         this.context=context;
         this.matrix=matrix;
         this.onGestureClickListener=onGestureClickListener;
@@ -51,10 +53,7 @@ public class MyGestureDector {
                 downY= event.getY();
                 onMoveDownX= event.getX();
                 onMoveDownY=event.getY();
-                if (!scroller.isFinished()) {
-                    isFling=false;
-                    scroller.abortAnimation();
-                }
+                isConsume=view.consumeEvent(event);
                 break;
             case MotionEvent.ACTION_POINTER_DOWN:
                 //如果有新的手指按下，就直接把它当作当前活跃的指针
@@ -70,6 +69,12 @@ public class MyGestureDector {
                 onSecondaryPointerUp(event);
                 break;
             case MotionEvent.ACTION_MOVE:
+                if (isConsume){
+                    view.getParent().requestDisallowInterceptTouchEvent(true);
+                }else {
+                    view.getParent().requestDisallowInterceptTouchEvent(false);
+                    break;
+                }
                     int activePointerIndex = event.findPointerIndex(mActivePointerId);
                     if (activePointerIndex == INVALID_POINTER) {
                         break;
@@ -116,13 +121,8 @@ public class MyGestureDector {
                     onMoveDownY= event.getY(activePointerIndex);
                 break;
             case MotionEvent.ACTION_CANCEL:
-//                if (getScrollX() < 0) {
-//                    scroller.startScroll(getScrollX(), 0, -getScrollX(), 0, 800);
-//                    view.invalidate();
-//                } else if (getScrollX() >= (scrollerPointModelList.size() * horizontalAverageWidth - ((getWidth() - getPaddingRight() - originalPoint.x)))) {
-//                    scroller.startScroll(getScrollX(), 0,  (scrollerPointModelList.size() * horizontalAverageWidth - (getWidth() - getPaddingRight() - originalPoint.x) - getScrollX()), 0, 800);
-//                    view.invalidate();
-//                }
+                mActivePointerId = INVALID_POINTER;
+                break;
             case MotionEvent.ACTION_UP:
                 mActivePointerId = INVALID_POINTER;
                 float clickX = downX -  event.getX();
@@ -137,28 +137,8 @@ public class MyGestureDector {
                         onGestureClickListener.onClick((int) pf.x,(int)pf.y);
 
                     }
-                }else {}
-//                    if (isScoll){
-//                        if (getScrollX()<0){
-//                            scroller.startScroll(getScrollX(),0,-getScrollX(),0,800);
-//                            view.invalidate();
-//                        }else if (getScrollX()>=(scrollerPointModelList.size()*horizontalAverageWidth-((getWidth()-getPaddingRight()-originalPoint.x)))){
-//                            scroller.startScroll(getScrollX(),0, (scrollerPointModelList.size()*horizontalAverageWidth-(getWidth()-getPaddingRight()-originalPoint.x)-getScrollX()),0,800);
-//                            view.invalidate();
-//                        }else{
-//                            final int pointerId = event.getPointerId(0);
-//                            mVelocityTracker.computeCurrentVelocity(1000, ViewConfiguration.getMaximumFlingVelocity());
-//                            final int velocityX = mVelocityTracker.getXVelocity(pointerId);
-//                            isFling=true;
-//                            scroller.fling(getScrollX(),0,-velocityX,0,-(getWidth()-getPaddingRight()-originalPoint.x), (scrollerPointModelList.size()*horizontalAverageWidth)+(getWidth()-getPaddingRight()-originalPoint.x),0,0);
-//                            view.invalidate();
-//                            if (mVelocityTracker != null) {
-//                                mVelocityTracker.clear();
-//                                mVelocityTracker = null;
-//                            }
-//                        }
-//                    }
-//                }
+                }
+
                 break;
         }
         if (mActivePointerId != INVALID_POINTER) {
