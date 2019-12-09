@@ -51,6 +51,7 @@ public class ChinaMapView extends View {
     private int scaleMin=1;//缩放的最小倍数
     private Matrix myMatrix;    //用来完成缩放
     private String isRestore;
+    private float translateXRatio,translateYRatio;
     private onProvinceClickLisener onProvinceClickLisener;//省份点击回调
     private MyGestureDector myGestureDector;//拖动惯性滑动点击帮助类
     private MyScaleGestureDetector scaleGestureDetector;
@@ -76,6 +77,10 @@ public class ChinaMapView extends View {
         bundle.putBoolean("isFirst", isFirst);
         bundle.putString("isRestore", "isRestore");
         bundle.putInt("selectPosition", selectPosition);
+        myMatrix.getValues(matrixValues);
+        bundle.putFloatArray("matrixValues",matrixValues);
+        bundle.putFloat("translateXRatio",matrixValues[Matrix.MTRANS_X]/getWidth());
+        bundle.putFloat("translateYRatio",matrixValues[Matrix.MTRANS_Y]/getHeight());
         return bundle;
     }
 
@@ -86,6 +91,9 @@ public class ChinaMapView extends View {
             isFirst=bundle.getBoolean("isFirst");
             isRestore=bundle.getString("isRestore");
             selectPosition=bundle.getInt("selectPosition");
+            matrixValues=bundle.getFloatArray("matrixValues");
+             translateXRatio=bundle.getFloat("translateXRatio");
+             translateYRatio=bundle.getFloat("translateYRatio");
             state = bundle.getParcelable("superState");
             super.onRestoreInstanceState(state);
         }
@@ -148,8 +156,7 @@ public class ChinaMapView extends View {
                             chinaMapModel.getProvinceslist().get(selectPosition).setSelect(false);}
                             //设置新的选中的省份
                             p.setSelect(true);
-                            //暴露到Activity中的接口，把省的名字传过去
-                            onProvinceClickLisener.onSelectProvince(p.getName());
+
                             invalidate();
                             return;
 
@@ -216,6 +223,7 @@ public class ChinaMapView extends View {
     }
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+
         if (chinaMapModel==null){
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         }else {
@@ -240,7 +248,6 @@ public class ChinaMapView extends View {
                             }else {
                                 height =(int) ((chinaMapModel.getMaxY() - chinaMapModel.getMinY()) * map_scale);
                             }
-                            Log.v("xixi=",map_scale+"="+(float) MeasureSpec.getSize(widthMeasureSpec)+"="+(chinaMapModel.getMaxX()-chinaMapModel.getMinX()));
                             break;
                     }
                     break;
@@ -294,6 +301,7 @@ public class ChinaMapView extends View {
             isFirst=false;
 
         }else {
+            //恢复状态至屏幕旋转之前
             if (!TextUtils.isEmpty(isRestore)){
                 viewWidth=getWidth();
                 viewHeight=getHeight();
@@ -308,6 +316,10 @@ public class ChinaMapView extends View {
                 }
                 //缩放所有Path
                 scalePoints(null,map_scale);
+                matrixValues[Matrix.MTRANS_X]=getWidth()*translateXRatio;
+                matrixValues[Matrix.MTRANS_Y]=getHeight()*translateYRatio;
+                myMatrix.setValues(matrixValues);
+                Log.v("xixi=",matrixValues[Matrix.MTRANS_X]+"="+matrixValues[Matrix.MTRANS_Y]);
                 isRestore="";
             }
             //关联缩放和平移后的矩阵
@@ -349,6 +361,10 @@ public class ChinaMapView extends View {
                 }
             }
             if (selectPosition!=-1){
+                //暴露到Activity中的接口，把省的名字传过去
+                if (onProvinceClickLisener!=null){
+                    onProvinceClickLisener.onSelectProvince(chinaMapModel.getProvinceslist().get(selectPosition).getName());
+                }
             //再绘制点击所在的省份,此时画笔宽度设为2.5，以达到着重显示的效果
             innerPaint.setColor(chinaMapModel.getProvinceslist().get(selectPosition).getColor());
             outerPaint.setColor(chinaMapModel.getProvinceslist().get(selectPosition).getSelectBordercolor());
@@ -423,7 +439,7 @@ public class ChinaMapView extends View {
     }
     //选中所点击的省份
     public interface onProvinceClickLisener{
-        public void onSelectProvince(String provinceName);
+         void onSelectProvince(String provinceName);
     }
     public  float getScale() {
         myMatrix.getValues(matrixValues);
