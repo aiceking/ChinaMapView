@@ -30,8 +30,10 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation project(':chinamapviewlibrary')
+//    implementation project(':chinamapviewlibrary')
+    implementation 'com.github.NoEndToLF:ChinaMapView:1.0.1'
     //butterknife
+
     implementation 'com.jakewharton:butterknife:10.0.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.0.0'
     implementation 'com.android.support:design:29.0.0'
