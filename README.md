@@ -57,7 +57,7 @@
 |setEnableTouch  |boolean  | 设置是否可以消费事件（默认为true）  |
 |setScaleMin  |int  | 设置缩放的最小倍数，最终结果>=0  |
 |setScaleMax  |int  | 设置缩放的最大倍数，最终结果>=1  |
-|getChinaMapModel  |void  | 返回ChinaMapModel对象，用于只有的修改刷新view的展示  |
+|getChinaMapModel  |void  | 返回ChinaMapModel对象，用于之后的修改刷新view的展示  |
 |setOnProvinceClickLisener  |ChinaMapView.onProvinceClickLisener  | 省份点击选中接口  |
 |setOnPromiseParentTouchListener  |ChinaMapView.onPromiseParentTouchListener  | 通知外界是否允许chinamapview之上的view拦截事件 |
 |notifyDataChanged  |void  | 修改ChinaMapModel对象后，刷新View  |
