@@ -37,13 +37,13 @@
     * [代码中修改显示Data](#代码中通过ChinaMapView.getChinaMapModel()拿到ChinaMapModel，通过修改ChinaMapModel的属性来刷新ChinaMapView的显示效果，Demo中的SwipRefreshAppbarActivity和NormalActivity中有详细使用代码)
     
 # 基本API
-## Data实例类 ChinaMapModel，通过ChinaMapView.getChinaMapModel()获得，以下为使用期间会接触到的属性，别的属性都是为绘制准备的，不用关心，也不用去设置。    
+### Data实例类 ChinaMapModel，通过ChinaMapView.getChinaMapModel()获得，以下为使用期间会接触到的属性，别的属性都是为绘制准备的，不用关心，也不用去设置。    
 
 |属性  | 类型  |作用  |
 | :--------| :--------|:--: |
 | provinceslist| List<ProvinceModel>|包含所有的省份model|
   
-## Data实例类 ProvinceModel，通过chinaMapModel.getProvinceslist()获得，以下为使用期间会接触到的属性，别的属性都是为绘制准备的，不用关心，也不用去设置。 
+### Data实例类 ProvinceModel，通过chinaMapModel.getProvinceslist()获得，以下为使用期间会接触到的属性，别的属性都是为绘制准备的，不用关心，也不用去设置。 
 
 |属性  | 类型  |作用  |
 | :--------| :--------|:--: |
@@ -51,7 +51,7 @@
 | normalBordercolor| int|省份未选中状态下的边框颜色|
 | selectBordercolor| int|省份未选中状态下的边框颜色|
 
-## ChinaMapView
+### ChinaMapView
 |方法  |参数  | 作用  |
 | :--------| :--------| :--: |
 |setEnableTouch  |boolean  | 设置是否可以消费事件（默认为true）  |
@@ -63,7 +63,7 @@
 |notifyDataChanged  |void  | 修改ChinaMapModel对象后，刷新View  |
 
 # 使用
-## 引入
+### 引入
 Step 1. Add it in your root build.gradle at the end of repositories:
 
 	allprojects {
