@@ -77,7 +77,18 @@ Step 2. Add the dependency
 	dependencies {
 	        implementation 'com.github.NoEndToLF:ChinaMapView:1.0.1'
 	}
-	
-### 布局XML中添加与系统View使用方式一样，宽高如果只确定其一，另一个根据parent的宽高和map的比例取最小值确定。最终map的宽度和高度由padding决定
-
-### 代码中通过ChinaMapView的getChinaMapModel()方法拿到ChinaMapModel，通过修改ChinaMapModel的属性来刷新ChinaMapView的显示效果，其他的缩放倍数和接口通过ChinaMapView直接设置，Demo中的SwipRefreshAppbarActivity和NormalActivity中有详细使用代码
+### 布局XML中添加	
+#### 布局XML中添加与系统View使用方式一样，宽高如果只确定其一，另一个根据parent的宽高和map的比例取最小值确定。最终map的宽度和高度由padding决定
+ ``` java
+<com.wxy.chinamapview.view.ChinaMapView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/map"></com.wxy.chinamapview.view.ChinaMapView>
+ ``` 
+ 
+### 代码中修改Data和View属性
+#### 代码中通过ChinaMapView的getChinaMapModel()方法拿到ChinaMapModel，通过修改ChinaMapModel的属性来刷新ChinaMapView的显示效果，其他的缩放倍数和接口通过ChinaMapView直接设置，Demo中的SwipRefreshAppbarActivity和NormalActivity中有详细使用代码
+##### 拿到ChinaMapModel
+ ``` java
+chinaMapModel = map.getChinaMapModel();
+ ```
