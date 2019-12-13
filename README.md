@@ -51,6 +51,17 @@
 | normalBordercolor| int|省份未选中状态下的边框颜色|
 | selectBordercolor| int|省份未选中状态下的边框颜色|
 
+## ChinaMapView
+|方法  |参数  | 作用  |
+| :--------| :--------| :--: |
+|setEnableTouch  |boolean  | 设置是否可以消费事件（默认为true）  |
+|setScaleMin  |int  | 设置缩放的最小倍数，最终结果>=0  |
+|setScaleMax  |int  | 设置缩放的最大倍数，最终结果>=1  |
+|getChinaMapModel  |void  | 返回ChinaMapModel对象，用于只有的修改刷新view的展示  |
+|setOnProvinceClickLisener  |ChinaMapView.onProvinceClickLisener  | 省份点击选中接口  |
+|setOnPromiseParentTouchListener  |ChinaMapView.onPromiseParentTouchListener  | 通知外界是否允许chinamapview之上的view拦截事件 |
+|notifyDataChanged  |void  | 修改ChinaMapModel对象后，刷新View  |
+
 # 使用
 ## 引入
 Step 1. Add it in your root build.gradle at the end of repositories:
