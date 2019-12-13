@@ -92,3 +92,71 @@ Step 2. Add the dependency
  ``` java
 chinaMapModel = map.getChinaMapModel();
  ```
+ ##### 设置缩放的最大最小值
+  ``` java
+ map.setScaleMin(1);
+        map.setScaleMax(3);
+```
+##### 修改省份颜色，这里所有省份都处理成一样了，实际场景可给省份设置不同的颜色，修改完后map.notifyDataChanged()刷新View
+  ``` java
+for (ProvinceModel provinceModel:chinaMapModel.getProvinceslist()){
+                                    provinceModel.setColor(color);
+                                }
+                                map.notifyDataChanged();
+```
+##### 修改省份未选中状态下边框颜色，这里所有省份都处理成一样了，实际场景可给省份设置不同的颜色，修改完后map.notifyDataChanged()刷新View
+  ``` java
+for (ProvinceModel provinceModel:chinaMapModel.getProvinceslist()){
+                                    provinceModel.setNormalBordercolor(color);
+                                }
+                                map.notifyDataChanged();
+```
+##### 修改省份选中状态下边框颜色，这里所有省份都处理成一样了，实际场景可给省份设置不同的颜色，修改完后map.notifyDataChanged()刷新View
+``` java
+for (ProvinceModel provinceModel:chinaMapModel.getProvinceslist()){
+                                    provinceModel.setSelectBordercolor(color);
+                                }
+                                map.notifyDataChanged();
+```
+##### 设置省份点击事件
+ ``` java
+map.setOnProvinceClickLisener(new ChinaMapView.onProvinceClickLisener() {
+            @Override
+            public void onSelectProvince(String provinceName) {
+                tvName.setText(provinceName);
+            }
+        });
+```
+##### 添加事件处理回调，即通知外界是否要拦截事件;
+``` java
+chinamapView.setOnPromiseParentTouchListener(new ChinaMapView.onPromiseParentTouchListener() {
+            @Override
+            public void onPromiseTouch(boolean promise) {
+                swipe.setEnabled(promise);
+            }
+
+        });
+```
+##### 修改完chinamapmodel的数据后，刷新数据用chinamapView.notifyDataChanged()，且刷新期间禁止chinamapView响应事件chinamapView.setEnableTouch(true);;
+``` java
+swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                chinamapView.setEnableTouch(false);
+                //模拟耗时
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        String namestring = ColorChangeUtil.nameStrings[++currentColor %               ColorChangeUtil.nameStrings.length];
+                        btnChange.setText(namestring);
+                        colorView.setList(colorView_hashmap.get(namestring));
+                        //重置map各省份颜色
+                        ColorChangeUtil.changeMapColors(chinaMapModel, namestring);
+                        chinamapView.notifyDataChanged();
+                        swipe.setRefreshing(false);
+                        chinamapView.setEnableTouch(true);
+                    }
+                },2000);
+            }
+        });
+```
