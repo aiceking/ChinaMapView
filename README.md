@@ -22,7 +22,7 @@
    * 1、拖拽事件：Down的点在map内，通过onPromiseParentTouchListener方法中使用SwipeRefreshLayout.setEnabled(promise)通知外界设置SwipeRefreshLayout不可以滑动。
    * 2、缩放事件：在MyScaleGestureDetector的onScaleBegin方法中通过onPromiseParentTouchListener方法中使用SwipeRefreshLayout.setEnabled(promise)通知外界设置SwipeRefreshLayout不可以滑动。
    * 3、在SwipeRefreshLayout的OnRefreshListener中设置ChinaMapView的setEnableTouch(false)方法通知刷新期间，ChinaMapView不响应任何事件。
-   * 4、同理，监听AppBarLayout的滚动高度来控制只有展开才允许SwipeRefreshLayout下拉刷新和ChinaMapView的事件响应,否则都禁止
+   * 4、同理，监听AppBarLayout的滚动高度来控制只有完全展开才允许SwipeRefreshLayout下拉刷新和ChinaMapView的事件响应,否则都禁止
 
 | 常规使用      |下拉刷新及其他滑动冲突  |
 | :--------:| :--------:|  
