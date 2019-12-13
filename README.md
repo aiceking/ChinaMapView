@@ -15,7 +15,7 @@
    * 2、暴露事件冲突接口，允许外界操作父控件的事件及该view自己的事件（因为这只是个View，没办法直接处理所有的滑动冲突场景）
    * 3、内存抖动要小，防止内存溢出。
 -------------------
-# 示例
+# 示例（真机流畅丝滑，压缩的GIF丢帧严重）
 ## Demo演示了普通用法和涉及到SwipeRefreshLayout+AppBarLayout等类似的滑动冲突的用法（细节请看代码）。
 * **1、普通使用** ：只有Down的点在map的范围内才可以响应拖拽事件，否则通知父控件拦截；缩放事件不做限制。
 * **2、下拉刷新及其他滑动冲突** ：
@@ -28,3 +28,41 @@
 | :--------:| :--------:|  
 |![normal](https://github.com/NoEndToLF/ChinaMapView/blob/master/DemoImg/demo1.gif)| ![fix](https://github.com/NoEndToLF/ChinaMapView/blob/master/DemoImg/demo2.gif)| 
  <br />
+
+# 使用  
+* [基本API](#基本API)
+* [使用](#使用)
+    * [引入](#引入)
+    * [布局XML中添加](#布局XML中添加与系统View使用方式一样，宽高如果只确定其一，另一个根据parent的宽高和map的比例取最小值确定。最终map的宽度和高度由padding决定。
+    * [代码中修改显示Data](#代码中通过ChinaMapView.getChinaMapModel()拿到ChinaMapModel，通过修改ChinaMapModel的属性来刷新ChinaMapView的显示效果，Demo中的SwipRefreshAppbarActivity和NormalActivity中有详细使用代码)
+    
+# 基本API
+## Data实例类 ChinaMapModel，通过ChinaMapView.getChinaMapModel()获得，以下为使用期间会接触到的属性，别的属性都是为绘制准备的，不用关心，也不用去设置。    
+
+|属性  | 类型  |作用  |
+| :--------| :--------|:--: |
+| provinceslist| List<ProvinceModel>|包含所有的省份model|
+  
+## Data实例类 ProvinceModel，通过chinaMapModel.getProvinceslist()获得，以下为使用期间会接触到的属性，别的属性都是为绘制准备的，不用关心，也不用去设置。 
+
+|属性  | 类型  |作用  |
+| :--------| :--------|:--: |
+| color| int|省份填充的颜色|
+| normalBordercolor| int|省份未选中状态下的边框颜色|
+| selectBordercolor| int|省份未选中状态下的边框颜色|
+
+# 使用
+## 引入
+Step 1. Add it in your root build.gradle at the end of repositories:
+
+	allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
+Step 2. Add the dependency
+
+	dependencies {
+	        implementation 'com.github.NoEndToLF:ChinaMapView:1.0.1'
+	}
