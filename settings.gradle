@@ -1,2 +1,2 @@
-include ':app', ':chinamapview'
+include ':app', ':chinamapviewlibrary'
 rootProject.name='ChinaMapView'

@@ -9,74 +9,33 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.aice.chinamapview.R;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
 
 import java.util.List;
+
+import androidx.annotation.Nullable;
 
 /**
  * Created by Vmmet on 2016/10/10.
  */
-public class ProvinceAdapter extends BaseAdapter {
-    private Context context;
-    private List<String> list;
-    private int position;
-    public ProvinceAdapter(Context context, List<String> list){
-        this.context=context;
-        this.list=list;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
-        notifyDataSetChanged();
+public class ProvinceAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
+    public ProvinceAdapter(int layoutResId, @Nullable List<String> data) {
+        super(layoutResId, data);
     }
 
     @Override
-    public int getCount() {
-        return list.size();
-    }
-    @Override
-    public Object getItem(int i) {
-        return list.get(i);
-    }
-    @Override
-    public long getItemId(int i) {
-        return i;
-    }
-    @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        ViewHolder viewHolder;
-        if (view == null) {
-            view = LayoutInflater.from(context).inflate(
-                    R.layout.listview_province_item, null);
-            viewHolder = new ViewHolder();
-            viewHolder.province_name = (TextView) view
-                    .findViewById(R.id.province_name);
-            viewHolder.province_elec_rise = (TextView) view
-                    .findViewById(R.id.province_elec_rise);
-            viewHolder.province_accumulative_rise = (TextView) view
-                    .findViewById(R.id.province_accumulative_rise);
-            viewHolder.province_elec_hours = (TextView) view
-                    .findViewById(R.id.province_elec_hours);
-            viewHolder.province_accumulative_hours = (TextView) view
-                    .findViewById(R.id.province_accumulative_hours);
-            view.setTag(viewHolder);
-        } else {
-            viewHolder = (ViewHolder) view.getTag();
-        }
-        viewHolder.province_name.setText(list.get(i).split("_")[0]);
-        viewHolder.province_elec_rise.setText(list.get(i).split("_")[1]+"%");
-        viewHolder.province_accumulative_rise.setText(list.get(i).split("_")[2]+"%");
-        viewHolder.province_elec_hours.setText(list.get(i).split("_")[3]);
-        viewHolder.province_accumulative_hours.setText(list.get(i).split("_")[4]);
-        if (i==position){
-            viewHolder.province_name.setTextColor(Color.RED);
+    protected void convert(BaseViewHolder helper, String item) {
+        ((TextView)helper.getView(R.id.province_name)).setText(item.split("_")[0]);
+        ((TextView)helper.getView(R.id.province_elec_rise)).setText(item.split("_")[1]+"%");
+        ((TextView)helper.getView(R.id.province_accumulative_rise)).setText(item.split("_")[2]+"%");
+        ((TextView)helper.getView(R.id.province_elec_hours)).setText(item.split("_")[3]);
+        ((TextView)helper.getView(R.id.province_accumulative_hours)).setText(item.split("_")[4]);
+        if (helper.getAdapterPosition()==0){
+            ((TextView)helper.getView(R.id.province_name)).setTextColor(Color.RED);
         }else{
-            viewHolder.province_name.setTextColor(Color.BLACK);
+            ((TextView)helper.getView(R.id.province_name)).setTextColor(Color.BLACK);
         }
-        return view;
-    }
-    private class ViewHolder {
-        TextView province_name,province_elec_rise,
-                province_accumulative_rise,province_elec_hours,
-                province_accumulative_hours;
+
     }
 }

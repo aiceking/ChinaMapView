@@ -30,7 +30,13 @@ public class MyGestureDector {
     private OnGestureClickListener onGestureClickListener;
     private int mapWidth,mapHeight;//map初始宽度和高度
     private int viewWidth,viewHeight;//map初始宽度和高度
-    public MyGestureDector(Context context, ChinaMapView view,Matrix matrix,OnGestureClickListener onGestureClickListener){
+    private ChinaMapView.onPromiseParentTouchListener onPromiseParentTouchListener;
+
+    public void setOnPromiseParentTouchListener(ChinaMapView.onPromiseParentTouchListener onPromiseParentTouchListener) {
+        this.onPromiseParentTouchListener = onPromiseParentTouchListener;
+    }
+
+    public MyGestureDector(Context context, ChinaMapView view, Matrix matrix, OnGestureClickListener onGestureClickListener){
         this.context=context;
         this.matrix=matrix;
         this.onGestureClickListener=onGestureClickListener;
@@ -71,8 +77,14 @@ public class MyGestureDector {
             case MotionEvent.ACTION_MOVE:
                 if (isConsume){
                     view.getParent().requestDisallowInterceptTouchEvent(true);
+                    if (onPromiseParentTouchListener!=null){
+                        onPromiseParentTouchListener.onPromiseTouch(false);
+                    }
                 }else {
                     view.getParent().requestDisallowInterceptTouchEvent(false);
+                    if (onPromiseParentTouchListener!=null){
+                        onPromiseParentTouchListener.onPromiseTouch(true);
+                    }
                     break;
                 }
                     int activePointerIndex = event.findPointerIndex(mActivePointerId);
@@ -122,6 +134,9 @@ public class MyGestureDector {
                 break;
             case MotionEvent.ACTION_CANCEL:
                 mActivePointerId = INVALID_POINTER;
+                if (onPromiseParentTouchListener!=null){
+                    onPromiseParentTouchListener.onPromiseTouch(true);
+                }
                 break;
             case MotionEvent.ACTION_UP:
                 mActivePointerId = INVALID_POINTER;
@@ -138,7 +153,9 @@ public class MyGestureDector {
 
                     }
                 }
-
+                if (onPromiseParentTouchListener!=null){
+                    onPromiseParentTouchListener.onPromiseTouch(true);
+                }
                 break;
         }
         if (mActivePointerId != INVALID_POINTER) {

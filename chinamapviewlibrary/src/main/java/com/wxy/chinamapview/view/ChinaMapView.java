@@ -2,7 +2,6 @@ package com.wxy.chinamapview.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -14,27 +13,19 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
 import android.view.View;
-import android.view.ViewConfiguration;
 
 import com.wxy.chinamapview.gesture.MyGestureDector;
 import com.wxy.chinamapview.gesture.MyScaleGestureDetector;
-import com.wxy.chinamapview.gesture.ScrollScaleGestureDetector;
 import com.wxy.chinamapview.model.ChinaMapModel;
 import com.wxy.chinamapview.model.ProvinceModel;
+import com.wxy.chinamapview.util.ChinaMapSvgUtil;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.Nullable;
-import androidx.core.view.ViewCompat;
-
-import static android.content.ContentValues.TAG;
 
 public class ChinaMapView extends View {
     private Paint innerPaint,outerPaint;//画省份的内部画笔和外圈画笔
@@ -55,20 +46,23 @@ public class ChinaMapView extends View {
     private onProvinceClickLisener onProvinceClickLisener;//省份点击回调
     private MyGestureDector myGestureDector;//拖动惯性滑动点击帮助类
     private MyScaleGestureDetector scaleGestureDetector;
+    private onPromiseParentTouchListener onPromiseParentTouchListener;//是否允许父控件拦截事件
+    public void setEnableTouch(boolean enableTouch) {
+        this.enableTouch = enableTouch;
+    }
+
+    private boolean enableTouch;
+    public void setOnPromiseParentTouchListener(ChinaMapView.onPromiseParentTouchListener onPromiseParentTouchListener) {
+        this.onPromiseParentTouchListener = onPromiseParentTouchListener;
+        myGestureDector.setOnPromiseParentTouchListener(onPromiseParentTouchListener);
+    }
+
     public void setOnProvinceClickLisener(ChinaMapView.onProvinceClickLisener onProvinceClickLisener) {
         this.onProvinceClickLisener = onProvinceClickLisener;
     }
-
     public ChinaMapModel getChinaMapModel() {
         return chinaMapModel;
     }
-
-    public void setChinaMapModel(ChinaMapModel chinaMapModel) {
-        this.chinaMapModel = chinaMapModel;
-        isFirst=true;
-        requestLayout();
-    }
-
     @Nullable
     @Override
     protected Parcelable onSaveInstanceState() {
@@ -99,7 +93,7 @@ public class ChinaMapView extends View {
         }
     }
 
-    public void notifyDataSetChanged(){
+    public void notifyDataChanged(){
         invalidate();
     }
     public ChinaMapView(Context context) {
@@ -112,6 +106,10 @@ public class ChinaMapView extends View {
 
     public ChinaMapView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        //拿到SVG文件，解析成对象
+        chinaMapModel = new ChinaMapSvgUtil(context).getProvinces();
+        isFirst=true;
+        enableTouch=true;
         //初始化省份内部画笔
         innerPaint=new Paint();
         innerPaint.setAntiAlias(true);
@@ -141,10 +139,16 @@ public class ChinaMapView extends View {
             @Override
             public boolean onScaleBegin(MyScaleGestureDetector detector) {
                 getParent().requestDisallowInterceptTouchEvent(true);
+                if (onPromiseParentTouchListener!=null){
+                    onPromiseParentTouchListener.onPromiseTouch(false);
+                }
                 return true;
             }
             @Override
             public void onScaleEnd(MyScaleGestureDetector detector) {
+                if (onPromiseParentTouchListener!=null){
+                    onPromiseParentTouchListener.onPromiseTouch(true);
+                }
             }
         });
         myGestureDector=new MyGestureDector(context,this, myMatrix, new MyGestureDector.OnGestureClickListener() {
@@ -351,11 +355,15 @@ public class ChinaMapView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if (enableTouch){
          scaleGestureDetector.onTouchEvent(event);
         if (!scaleGestureDetector.isInProgress()) {
             myGestureDector.onTouchEvent(event);
         }
         return true;
+        }else {
+            return super.onTouchEvent(event);
+        }
     }
 
 
@@ -458,7 +466,10 @@ public class ChinaMapView extends View {
     public interface onProvinceClickLisener{
          void onSelectProvince(String provinceName);
     }
-    public  float getScale() {
+    public interface onPromiseParentTouchListener{
+        void onPromiseTouch(boolean promise);
+    }
+    private   float getScale() {
         myMatrix.getValues(matrixValues);
         if (matrixValues[Matrix.MSCALE_X]==0){
             return 1;
