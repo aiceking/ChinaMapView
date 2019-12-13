@@ -34,7 +34,7 @@
 * [使用](#使用)
     * [引入](#引入)
     * [布局XML中添加](#布局XML中添加与系统View使用方式一样宽高如果只确定其一另一个根据parent的宽高和map的比例取最小值确定最终map的宽度和高度由padding决定)
-    * [代码中修改显示Data](#代码中通过ChinaMapViewgetChinaMapModel()拿到ChinaMapModel通过修改ChinaMapModel的属性来刷新ChinaMapView的显示效果其他的缩放倍数和接口通过ChinaMapView直接设置Demo中的SwipRefreshAppbarActivity和NormalActivity中有详细使用代码)
+    * [代码中修改Data和View属性](#代码中通过ChinaMapView.getChinaMapModel()拿到ChinaMapModel通过修改ChinaMapModel的属性来刷新ChinaMapView的显示效果其他的缩放倍数和接口通过ChinaMapView直接设置Demo中的SwipRefreshAppbarActivity和NormalActivity中有详细使用代码)
     
 # 基本API
 ### Data实例类 ChinaMapModel，通过ChinaMapView.getChinaMapModel()获得，以下为使用期间会接触到的属性，别的属性都是为绘制准备的，不用关心，也不用去设置。    
