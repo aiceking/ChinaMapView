@@ -121,7 +121,7 @@ for (ProvinceModel provinceModel:chinaMapModel.getProvinceslist()){
                                 }
                                 map.notifyDataChanged();
 ```
-##### 设置省份点击事件
+##### 设置省份点击事件，这里传递的是省份或者直辖市或者自治区的名字（上方有全部的name）
  ``` java
 map.setOnProvinceClickLisener(new ChinaMapView.onProvinceClickLisener() {
             @Override
