@@ -37,6 +37,9 @@
     * [代码中修改Data和View属性](#代码中通过ChinaMapView的getChinaMapModel方法拿到ChinaMapModel通过修改ChinaMapModel的属性来刷新ChinaMapView的显示效果其他的缩放倍数和接口通过ChinaMapView直接设置Demo中的SwipRefreshAppbarActivity和NormalActivity中有详细使用代码)
     
 # 基本API
+### 所有的省份、自治区、直辖市
+#### 安徽省,北京市,重庆市,福建省,广东省,甘肃省,广西省,贵州省,海南省,河北省,河南省,香港,黑龙江,湖南省,湖北省,吉林省,江苏省,江西省,辽宁省,澳门,内蒙古,宁夏区,青海省,陕西省,四川省,山东省,上海市,山西省,天津市,台湾,新疆区,西藏区,云南省,浙江省
+
 ### Data实例类 ChinaMapModel，通过ChinaMapView.getChinaMapModel()获得，以下为使用期间会接触到的属性，别的属性都是为绘制准备的，不用关心，也不用去设置。    
 
 |属性  | 类型  |作用  |
