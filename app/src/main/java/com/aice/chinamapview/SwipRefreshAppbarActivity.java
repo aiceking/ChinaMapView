@@ -27,6 +27,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.aice.chinamapview.listener.AppBarLayoutStateChangeListener.State.EXPANDED;
+
 public class SwipRefreshAppbarActivity extends AppCompatActivity {
 
     @BindView(R.id.chinamap_view)
@@ -47,6 +49,7 @@ public class SwipRefreshAppbarActivity extends AppCompatActivity {
     private int currentColor = 0;
     private List<String> list;
     private ProvinceAdapter adapter;
+    private AppBarLayoutStateChangeListener.State appbarState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +83,15 @@ public class SwipRefreshAppbarActivity extends AppCompatActivity {
                         ColorChangeUtil.changeMapColors(chinaMapModel, namestring);
                         chinamapView.notifyDataChanged();
                         swipe.setRefreshing(false);
-                        chinamapView.setEnableTouch(true);
+                        if (appbarState==EXPANDED){
+                            swipe.setEnabled(true);
+                            chinamapView.setEnableTouch(true);
+
+                        }else {
+                            swipe.setEnabled(false);
+                            chinamapView.setEnableTouch(false);
+
+                        }
                     }
                 },2000);
             }
@@ -91,6 +102,7 @@ public class SwipRefreshAppbarActivity extends AppCompatActivity {
         appbarLayout.addOnOffsetChangedListener(new AppBarLayoutStateChangeListener() {
             @Override
             public void onStateChanged(AppBarLayout appBarLayout, State state) {
+                appbarState=state;
                 switch (state) {
                     case EXPANDED:
                         swipe.setEnabled(true);

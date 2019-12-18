@@ -2,6 +2,7 @@ package com.aice.chinamapview;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -44,6 +45,13 @@ public class NormalActivity extends AppCompatActivity {
                 tvName.setText(provinceName);
             }
         });
+        String s="";
+        Log.v("xixi=",chinaMapModel.getProvinceslist().size()+"");
+        for(ProvinceModel provinceModel:chinaMapModel.getProvinceslist()){
+            s=s+provinceModel.getName()+",";
+        }
+        Log.v("xixi=",s);
+
     }
 
     @OnClick({R.id.btn_province_color, R.id.btn_border_unselect_color, R.id.btn_border_select_color})
