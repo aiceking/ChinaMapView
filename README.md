@@ -35,7 +35,7 @@
     * [引入](#引入)
     * [布局XML中添加](#布局XML中添加与系统View使用方式一样宽高如果只确定其一另一个根据parent的宽高和map的比例取最小值确定最终map的宽度和高度由padding决定)
     * [代码中修改Data和View属性](#代码中通过ChinaMapView的getChinaMapModel方法拿到ChinaMapModel通过修改ChinaMapModel的属性来刷新ChinaMapView的显示效果其他的缩放倍数和接口通过ChinaMapView直接设置Demo中的SwipRefreshAppbarActivity和NormalActivity中有详细使用代码)
-    
+* [反馈与建议](#反馈与建议)    
 # 基本API
 ### 所有的省份、自治区、直辖市
 #### 安徽省,北京市,重庆市,福建省,广东省,甘肃省,广西省,贵州省,海南省,河北省,河南省,香港,黑龙江,湖南省,湖北省,吉林省,江苏省,江西省,辽宁省,澳门,内蒙古,宁夏区,青海省,陕西省,四川省,山东省,上海市,山西省,天津市,台湾,新疆区,西藏区,云南省,浙江省
@@ -163,3 +163,29 @@ swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             }
         });
 ```
+# 反馈与建议
+- 邮箱：<wxy314309@foxmail.com>
+
+# License
+```
+Copyright (c) [2018] [static]
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+---------
