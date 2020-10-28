@@ -62,7 +62,7 @@
 |setScaleMin  |int  | 设置缩放的最小倍数，最终结果>=0  |
 |setScaleMax  |int  | 设置缩放的最大倍数，最终结果>=1  |
 |setShowName  |boolean  | 设置是否展示省份名字  |
-|getChinaMapModel  |void  | 返回ChinaMapModel对象，用于之后的修改刷新view的展示  |
+|getChinaMapModel  |ChinaMapModel  | 返回ChinaMapModel对象，用于之后的修改刷新view的展示  |
 |setOnProvinceClickLisener  |ChinaMapView.onProvinceClickLisener  | 省份点击选中接口  |
 |setOnPromiseParentTouchListener  |ChinaMapView.onPromiseParentTouchListener  | 通知外界是否允许chinamapview之上的view拦截事件 |
 |notifyDataChanged  |void  | 修改ChinaMapModel对象后，刷新View  |
@@ -80,7 +80,7 @@ Step 1. Add it in your root build.gradle at the end of repositories:
 Step 2. Add the dependency
 
 	dependencies {
-	        implementation 'com.github.NoEndToLF:ChinaMapView:1.0.1'
+	        implementation 'com.github.NoEndToLF:ChinaMapView:1.0.2'
 	}
 ### 布局XML中添加	
 #### 布局XML中添加与系统View使用方式一样，宽高如果只确定其一，另一个根据parent的宽高和map的比例取最小值确定。最终map的宽度和高度由padding决定
