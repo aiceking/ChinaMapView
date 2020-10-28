@@ -24,11 +24,13 @@
    * 3、在SwipeRefreshLayout的OnRefreshListener中设置ChinaMapView的setEnableTouch(false)方法通知刷新期间，ChinaMapView不响应任何事件。
    * 4、同理，监听AppBarLayout的滚动高度来控制只有完全展开才允许SwipeRefreshLayout下拉刷新和ChinaMapView的事件响应,否则都禁止
 
-| 常规使用      |展示省份名字  |下拉刷新及其他滑动冲突  |
-| :--------:| :--------:| :--------:|  
-|![normal](https://github.com/NoEndToLF/ChinaMapView/blob/master/DemoImg/demo1.gif)| ![name](https://github.com/NoEndToLF/ChinaMapView/blob/master/DemoImg/demo0.gif)| ![fix](https://github.com/NoEndToLF/ChinaMapView/blob/master/DemoImg/demo2.gif)| 
+| 常规使用      |下拉刷新及其他滑动冲突  |
+| :--------:|  :--------:|  
+|![normal](https://github.com/NoEndToLF/ChinaMapView/blob/master/DemoImg/demo1.gif)|  ![fix](https://github.com/NoEndToLF/ChinaMapView/blob/master/DemoImg/demo2.gif)| 
  <br />
-
+|展示省份名字(1.0.2新增支持)  |
+| ![name](https://github.com/NoEndToLF/ChinaMapView/blob/master/DemoImg/demo0.gif)|
+<br />
 # 开始使用  
 * [基本API](#基本API)
 * [使用](#使用)
