@@ -15,7 +15,7 @@
    * 2、暴露事件冲突接口，允许外界操作父控件的事件及该view自己的事件（因为这只是个View，没办法直接处理所有的滑动冲突场景）
    * 3、内存抖动要小，防止内存溢出。
 -------------------
-# 示例（真机流畅丝滑，压缩的GIF丢帧严重）
+# 示例（真机还比较流畅，压缩的GIF丢帧严重）
 ## Demo演示了普通用法和涉及到SwipeRefreshLayout+AppBarLayout等类似的滑动冲突的用法（细节请看代码）。
 * **1、普通使用** ：只有Down的点在map的范围内才可以响应拖拽事件，否则通知父控件拦截；缩放事件不做限制。
 * **2、下拉刷新及其他滑动冲突** ：
@@ -28,9 +28,10 @@
 | :--------:|  :--------:|  
 |![normal](https://github.com/NoEndToLF/ChinaMapView/blob/master/DemoImg/demo1.gif)|  ![fix](https://github.com/NoEndToLF/ChinaMapView/blob/master/DemoImg/demo2.gif)| 
  <br />
-| 展示省份名字(1.0.2新增支持)|
-| :--------:|
-| ![name](https://github.com/NoEndToLF/ChinaMapView/blob/master/DemoImg/demo0.gif)|
+ |展示省份名字(1.0.2新增支持)  | 类型  |作用  |
+| :--------| :--------|:--: |
+| ![name](https://github.com/NoEndToLF/ChinaMapView/blob/master/DemoImg/demo0.gif)| List<ProvinceModel>|包含所有的省份model|
+
 <br />
 
 # 开始使用  
