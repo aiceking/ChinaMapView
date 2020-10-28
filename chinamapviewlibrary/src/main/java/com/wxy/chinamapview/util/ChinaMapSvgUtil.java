@@ -57,6 +57,7 @@ public class ChinaMapSvgUtil {
                 Element ele_Province=(Element)items2.item(i);
                 String PathPoints=ele_Province.getAttribute("d");
                 String name=ele_Province.getAttribute("title");
+                String [] center=ele_Province.getAttribute("center").split(",");
                 List<Path> listpath=new ArrayList<>();
                 //拿到每个省的path集合
                 String s[]=PathPoints.split("z");
@@ -66,10 +67,13 @@ public class ChinaMapSvgUtil {
                 }
                 //拿到name和path
                 provinceModel.setName(name);
-                provinceModel.setListpath(listpath);
+                provinceModel.setListPath(listpath);
+                provinceModel.setCenterX(Float.parseFloat(center[0]));
+                provinceModel.setCenterY(Float.parseFloat(center[1]));
                 provinceModel.setColor(Color.WHITE);
-                provinceModel.setNormalBordercolor(Color.GRAY);
-                provinceModel.setSelectBordercolor(Color.BLACK);
+                provinceModel.setNameColor(Color.BLACK);
+                provinceModel.setNormalBorderColor(Color.GRAY);
+                provinceModel.setSelectBorderColor(Color.BLACK);
                 if (svg.getMax_X()>=Max_X){
                     Max_X=svg.getMax_X();
                 }
@@ -84,7 +88,7 @@ public class ChinaMapSvgUtil {
                 }
                 list.add(provinceModel);
             }
-                map.setProvinceslist(list);
+                map.setProvincesList(list);
                 map.setMaxX(Max_X);
                 map.setMaxY(Max_y);
                 map.setMinX(Min_x);

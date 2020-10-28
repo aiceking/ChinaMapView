@@ -24,9 +24,9 @@
    * 3、在SwipeRefreshLayout的OnRefreshListener中设置ChinaMapView的setEnableTouch(false)方法通知刷新期间，ChinaMapView不响应任何事件。
    * 4、同理，监听AppBarLayout的滚动高度来控制只有完全展开才允许SwipeRefreshLayout下拉刷新和ChinaMapView的事件响应,否则都禁止
 
-| 常规使用      |下拉刷新及其他滑动冲突  |
-| :--------:| :--------:|  
-|![normal](https://github.com/NoEndToLF/ChinaMapView/blob/master/DemoImg/demo1.gif)| ![fix](https://github.com/NoEndToLF/ChinaMapView/blob/master/DemoImg/demo2.gif)| 
+| 常规使用      |展示省份名字  |下拉刷新及其他滑动冲突  |
+| :--------:| :--------:| :--------:|  
+|![normal](https://github.com/NoEndToLF/ChinaMapView/blob/master/DemoImg/demo1.gif)| ![name](https://github.com/NoEndToLF/ChinaMapView/blob/master/DemoImg/demo0.gif)| ![fix](https://github.com/NoEndToLF/ChinaMapView/blob/master/DemoImg/demo2.gif)| 
  <br />
 
 # 开始使用  
@@ -38,7 +38,7 @@
 * [反馈与建议](#反馈与建议)    
 # 基本API
 ### 所有的省份、自治区、直辖市
-#### 安徽省,北京市,重庆市,福建省,广东省,甘肃省,广西省,贵州省,海南省,河北省,河南省,香港,黑龙江,湖南省,湖北省,吉林省,江苏省,江西省,辽宁省,澳门,内蒙古,宁夏区,青海省,陕西省,四川省,山东省,上海市,山西省,天津市,台湾,新疆区,西藏区,云南省,浙江省
+#### 安徽,北京,重庆,福建,广东,甘肃,广西,贵州,海南,河北,河南,香港,黑龙江,湖南,湖北,吉林,江苏,江西,辽宁,澳门,内蒙古,宁夏,青海,陕西,四川,山东,上海市,山西,天津,台湾,新疆,西藏,云南,浙江
 
 ### Data实例类 ChinaMapModel，通过ChinaMapView.getChinaMapModel()获得，以下为使用期间会接触到的属性，别的属性都是为绘制准备的，不用关心，也不用去设置。    
 
@@ -51,8 +51,9 @@
 |属性  | 类型  |作用  |
 | :--------| :--------|:--: |
 | color| int|省份填充的颜色|
-| normalBordercolor| int|省份未选中状态下的边框颜色|
-| selectBordercolor| int|省份未选中状态下的边框颜色|
+| normalBorderColor| int|省份未选中状态下的边框颜色|
+| selectBorderColor| int|省份未选中状态下的边框颜色|
+| setNameColor| int|省份名字颜色，每个省份名字的颜色可以不一致|
 
 ### ChinaMapView
 |方法  |参数  | 作用  |
@@ -60,6 +61,7 @@
 |setEnableTouch  |boolean  | 设置是否可以消费事件（默认为true）  |
 |setScaleMin  |int  | 设置缩放的最小倍数，最终结果>=0  |
 |setScaleMax  |int  | 设置缩放的最大倍数，最终结果>=1  |
+|setShowName  |boolean  | 设置是否展示省份名字  |
 |getChinaMapModel  |void  | 返回ChinaMapModel对象，用于之后的修改刷新view的展示  |
 |setOnProvinceClickLisener  |ChinaMapView.onProvinceClickLisener  | 省份点击选中接口  |
 |setOnPromiseParentTouchListener  |ChinaMapView.onPromiseParentTouchListener  | 通知外界是否允许chinamapview之上的view拦截事件 |

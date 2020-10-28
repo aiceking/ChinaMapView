@@ -15,22 +15,50 @@ public class ProvinceModel {
     private float minY;
     private String name;
     private int color;
-    private int normalBordercolor;
-    private int selectBordercolor;
-    private List<Path> listpath;
+    private int normalBorderColor;
+    private int selectBorderColor;
+    private List<Path> listPath;
     private List<Region> regionList;
     private boolean isSelect;
-    public int getNormalBordercolor() {
-        return normalBordercolor;
+    private float centerX;
+    private float centerY;
+    private int nameColor;
+
+    public int getNameColor() {
+        return nameColor;
     }
-    public void setNormalBordercolor(int normalBordercolor) {
-        this.normalBordercolor = normalBordercolor;
+
+    public void setNameColor(int nameColor) {
+        this.nameColor = nameColor;
     }
-    public int getSelectBordercolor() {
-        return selectBordercolor;
+
+    public float getCenterX() {
+        return centerX;
     }
-    public void setSelectBordercolor(int selectBordercolor) {
-        this.selectBordercolor = selectBordercolor;
+
+    public void setCenterX(float centerX) {
+        this.centerX = centerX;
+    }
+
+    public float getCenterY() {
+        return centerY;
+    }
+
+    public void setCenterY(float centerY) {
+        this.centerY = centerY;
+    }
+
+    public int getNormalBorderColor() {
+        return normalBorderColor;
+    }
+    public void setNormalBorderColor(int normalBorderColor) {
+        this.normalBorderColor = normalBorderColor;
+    }
+    public int getSelectBorderColor() {
+        return selectBorderColor;
+    }
+    public void setSelectBorderColor(int selectBorderColor) {
+        this.selectBorderColor = selectBorderColor;
     }
     public boolean isSelect() {
         return isSelect;
@@ -44,11 +72,11 @@ public class ProvinceModel {
     public void setRegionList(List<Region> regionList) {
         this.regionList = regionList;
     }
-    public List<Path> getListpath() {
-        return listpath;
+    public List<Path> getListPath() {
+        return listPath;
     }
-    public void setListpath(List<Path> listpath) {
-        this.listpath = listpath;
+    public void setListPath(List<Path> listPath) {
+        this.listPath = listPath;
     }
     public int getColor() {
         return color;

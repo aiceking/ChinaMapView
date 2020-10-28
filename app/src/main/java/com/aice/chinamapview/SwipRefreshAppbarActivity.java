@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 
 import com.aice.chinamapview.adapter.ProvinceAdapter;
@@ -76,24 +77,24 @@ public class SwipRefreshAppbarActivity extends AppCompatActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        String namestring = ColorChangeUtil.nameStrings[++currentColor % ColorChangeUtil.nameStrings.length];
-                        btnChange.setText(namestring);
-                        colorView.setList(colorView_hashmap.get(namestring));
+                        String nameString = ColorChangeUtil.nameStrings[++currentColor % ColorChangeUtil.nameStrings.length];
+                        btnChange.setText(nameString);
+                        colorView.setList(colorView_hashmap.get(nameString));
                         //重置map各省份颜色
-                        ColorChangeUtil.changeMapColors(chinaMapModel, namestring);
+                        ColorChangeUtil.changeMapColors(chinaMapModel, nameString);
                         chinamapView.notifyDataChanged();
                         swipe.setRefreshing(false);
-                        if (appbarState==EXPANDED){
+                        if (appbarState == EXPANDED) {
                             swipe.setEnabled(true);
                             chinamapView.setEnableTouch(true);
 
-                        }else {
+                        } else {
                             swipe.setEnabled(false);
                             chinamapView.setEnableTouch(false);
 
                         }
                     }
-                },2000);
+                }, 2000);
             }
         });
     }
@@ -102,7 +103,7 @@ public class SwipRefreshAppbarActivity extends AppCompatActivity {
         appbarLayout.addOnOffsetChangedListener(new AppBarLayoutStateChangeListener() {
             @Override
             public void onStateChanged(AppBarLayout appBarLayout, State state) {
-                appbarState=state;
+                appbarState = state;
                 switch (state) {
                     case EXPANDED:
                         swipe.setEnabled(true);
@@ -111,8 +112,9 @@ public class SwipRefreshAppbarActivity extends AppCompatActivity {
                     case COLLAPSED:
                     case INTERMEDIATE:
                         chinamapView.setEnableTouch(false);
-                        if (!swipe.isRefreshing()){
-                            swipe.setEnabled(false);}
+                        if (!swipe.isRefreshing()) {
+                            swipe.setEnabled(false);
+                        }
                         break;
                 }
             }
@@ -126,8 +128,8 @@ public class SwipRefreshAppbarActivity extends AppCompatActivity {
     }
 
     private void initRecycleView() {
-        list=new ArrayList<>();
-        for (int i = 0; i< ColorChangeUtil.province_datas.length; i++){
+        list = new ArrayList<>();
+        for (int i = 0; i < ColorChangeUtil.province_datas.length; i++) {
             list.add(ColorChangeUtil.province_datas[i]);
         }
         adapter = new ProvinceAdapter(R.layout.recycle_province_item, list);
@@ -178,8 +180,23 @@ public class SwipRefreshAppbarActivity extends AppCompatActivity {
             @Override
             public void onPromiseTouch(boolean promise) {
                 swipe.setEnabled(promise);
+                banAppBarScroll(promise);
+                Log.v("xixi=",promise+"");
             }
         });
+    }
+
+    private void banAppBarScroll(boolean isScroll) {
+        for (int i = 0; i < appbarLayout.getChildCount(); i++) {
+            View mAppBarChildAt = appbarLayout.getChildAt(i);
+            AppBarLayout.LayoutParams mAppBarParams = (AppBarLayout.LayoutParams) mAppBarChildAt.getLayoutParams();
+            if (isScroll) {
+                mAppBarParams.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
+                mAppBarChildAt.setLayoutParams(mAppBarParams);
+            } else {
+                mAppBarParams.setScrollFlags(0);
+            }
+        }
     }
 
     @OnClick(R.id.btn_change)

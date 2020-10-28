@@ -10,7 +10,17 @@ public class ChinaMapModel {
     private float minX;
     private float maxY;
     private float minY;
-    private List<ProvinceModel> provinceslist;
+    private boolean isShowName;
+
+    public boolean isShowName() {
+        return isShowName;
+    }
+
+    public void setShowName(boolean showName) {
+        isShowName = showName;
+    }
+
+    private List<ProvinceModel> provincesList;
 
     public float getMaxX() {
         return maxX;
@@ -44,11 +54,11 @@ public class ChinaMapModel {
         this.minY = minY;
     }
 
-    public List<ProvinceModel> getProvinceslist() {
-        return provinceslist;
+    public List<ProvinceModel> getProvincesList() {
+        return provincesList;
     }
-    public void setProvinceslist(List<ProvinceModel> provinceslist) {
-        this.provinceslist = provinceslist;
+    public void setProvincesList(List<ProvinceModel> provincesList) {
+        this.provincesList = provincesList;
     }
 
 

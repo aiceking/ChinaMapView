@@ -40,6 +40,17 @@
                 android:layout_height="wrap_content"
                 android:text="修改省份选中的边框颜色"
                 android:id="@+id/btn_border_select_color"
+                ></Button>
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/checkbox_province_name"
+                android:text="是否展示省份名称"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="修改省份名字的颜色"
+                android:id="@+id/btn_province_name_color"
                 android:layout_marginBottom="30dp"></Button>
         </LinearLayout>
     </ScrollView>
