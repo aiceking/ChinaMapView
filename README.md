@@ -26,9 +26,11 @@
 
 | 常规使用      |下拉刷新及其他滑动冲突  |
 | :--------:|  :--------:|  
-|![normal](https://github.com/NoEndToLF/ChinaMapView/blob/master/DemoImg/demo1.gif)|  ![fix](https://github.com/NoEndToLF/ChinaMapView/blob/master/DemoImg/demo2.gif)| 
+|![normal](https://github.com/NoEndToLF/ChinaMapView/blob/master/DemoImg/demo1.gif)|  ![fix](https://github.com/NoEndToLF/ChinaMapView/blob/master/DemoImg/demo2.gif)|   
+
+
  |展示省份名字(1.0.2新增支持)  | 
-| :--------| 
+| :--------:| 
 | ![name](https://github.com/NoEndToLF/ChinaMapView/blob/master/DemoImg/demo0.gif)|
 
 # 开始使用  
