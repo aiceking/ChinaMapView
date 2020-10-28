@@ -46,18 +46,18 @@
 
 ### Data实例类 ChinaMapModel，通过ChinaMapView.getChinaMapModel()获得，以下为使用期间会接触到的属性，别的属性都是为绘制准备的，不用关心，也不用去设置。    
 
-|属性  | 类型  |作用  |
+|属性(均包含set、get方法)  | 类型  |作用  |
 | :--------| :--------|:--: |
 | provinceslist| List<ProvinceModel>|包含所有的省份model|
-|setShowName  |boolean  | 设置是否展示省份名字  |  
+|isShowName  |boolean  | 设置是否展示省份名字  |  
 ### Data实例类 ProvinceModel，通过chinaMapModel.getProvinceslist()获得，以下为使用期间会接触到的属性，别的属性都是为绘制准备的，不用关心，也不用去设置。 
 
-|属性  | 类型  |作用  |
+|属性(均包含set、get方法)  | 类型  |作用  |
 | :--------| :--------|:--: |
 | color| int|省份填充的颜色|
 | normalBorderColor| int|省份未选中状态下的边框颜色|
 | selectBorderColor| int|省份未选中状态下的边框颜色|
-| setNameColor| int|省份名字颜色，每个省份名字的颜色可以不一致|
+| nameColor| int|省份名字颜色，每个省份名字的颜色可以不一致|
 
 ### ChinaMapView
 |方法  |参数  | 作用  |
@@ -123,6 +123,13 @@ for (ProvinceModel provinceModel:chinaMapModel.getProvinceslist()){
 ``` java
 for (ProvinceModel provinceModel:chinaMapModel.getProvinceslist()){
                                     provinceModel.setSelectBordercolor(color);
+                                }
+                                map.notifyDataChanged();
+```
+##### 修改省份名字的颜色，这里所有省份都处理成一样了，实际场景可给省份设置不同的颜色，修改完后map.notifyDataChanged()刷新View
+``` java
+for (ProvinceModel provinceModel:chinaMapModel.getProvincesList()){
+                                    provinceModel.setNameColor(color);
                                 }
                                 map.notifyDataChanged();
 ```
