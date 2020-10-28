@@ -29,6 +29,7 @@
 |![normal](https://github.com/NoEndToLF/ChinaMapView/blob/master/DemoImg/demo1.gif)|  ![fix](https://github.com/NoEndToLF/ChinaMapView/blob/master/DemoImg/demo2.gif)| 
  <br />
 |展示省份名字(1.0.2新增支持)  |
+| :--------:|
 | ![name](https://github.com/NoEndToLF/ChinaMapView/blob/master/DemoImg/demo0.gif)|
 <br />
 # 开始使用  
