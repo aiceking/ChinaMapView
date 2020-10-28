@@ -49,7 +49,7 @@
 |属性  | 类型  |作用  |
 | :--------| :--------|:--: |
 | provinceslist| List<ProvinceModel>|包含所有的省份model|
-  
+|setShowName  |boolean  | 设置是否展示省份名字  |  
 ### Data实例类 ProvinceModel，通过chinaMapModel.getProvinceslist()获得，以下为使用期间会接触到的属性，别的属性都是为绘制准备的，不用关心，也不用去设置。 
 
 |属性  | 类型  |作用  |
@@ -65,7 +65,6 @@
 |setEnableTouch  |boolean  | 设置是否可以消费事件（默认为true）  |
 |setScaleMin  |int  | 设置缩放的最小倍数，最终结果>=0  |
 |setScaleMax  |int  | 设置缩放的最大倍数，最终结果>=1  |
-|setShowName  |boolean  | 设置是否展示省份名字  |
 |getChinaMapModel  |ChinaMapModel  | 返回ChinaMapModel对象，用于之后的修改刷新view的展示  |
 |setOnProvinceClickLisener  |ChinaMapView.onProvinceClickLisener  | 省份点击选中接口  |
 |setOnPromiseParentTouchListener  |ChinaMapView.onPromiseParentTouchListener  | 通知外界是否允许chinamapview之上的view拦截事件 |
