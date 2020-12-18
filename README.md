@@ -83,7 +83,7 @@ Step 1. Add it in your root build.gradle at the end of repositories:
 Step 2. Add the dependency
 
 	dependencies {
-	        implementation 'com.github.NoEndToLF:ChinaMapView:1.0.2'
+	        implementation 'com.github.NoEndToLF:ChinaMapView:1.0.3'
 	}
 ### 布局XML中添加	
 #### 布局XML中添加与系统View使用方式一样，宽高如果只确定其一，另一个根据parent的宽高和map的比例取最小值确定。最终map的宽度和高度由padding决定
