@@ -1,38 +1,22 @@
 package com.aice.chinamapview;
 
 import androidx.appcompat.app.AppCompatActivity;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+import androidx.databinding.DataBindingUtil;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
+
+import com.aice.chinamapview.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
-    @BindView(R.id.btn_normal)
-    Button btnNormal;
-    @BindView(R.id.btn_refresh)
-    Button btnRefresh;
+    private ActivityMainBinding mBinding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
-
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        mBinding.btnNormal.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, NormalActivity.class)));
+        mBinding.btnRefresh.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, SwipRefreshAppbarActivity.class)));
     }
-    @OnClick({R.id.btn_normal, R.id.btn_refresh})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.btn_normal:
-                startActivity(new Intent(this,NormalActivity.class));
-                break;
-            case R.id.btn_refresh:
-                startActivity(new Intent(this,SwipRefreshAppbarActivity.class));
 
-                break;
-        }
-    }
 }

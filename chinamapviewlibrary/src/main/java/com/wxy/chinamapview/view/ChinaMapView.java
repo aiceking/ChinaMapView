@@ -416,7 +416,7 @@ public class ChinaMapView extends View {
                 }
             }
             //画省份名字
-            if (chinaMapModel.isShowName()){
+            if (chinaMapModel.isShowName()) {
                 for (ProvinceModel provinceModel : chinaMapModel.getProvincesList()) {
                     namePaint.setColor(provinceModel.getNameColor());
                     namePaint.setTextSize(mapWidth / 51f);
@@ -464,11 +464,13 @@ public class ChinaMapView extends View {
 
             }
             //画省份名字
-            if (chinaMapModel.isShowName()){
+            if (chinaMapModel.isShowName()) {
                 for (ProvinceModel provinceModel : chinaMapModel.getProvincesList()) {
                     namePaint.setColor(provinceModel.getNameColor());
                     namePaint.setTextSize(mapWidth / 51f);
-                    canvas.drawText(provinceModel.getName(), provinceModel.getCenterX(), provinceModel.getCenterY(), namePaint);
+                    if (canvas != null) {
+                        canvas.drawText(provinceModel.getName(), provinceModel.getCenterX(), provinceModel.getCenterY(), namePaint);
+                    }
                 }
             }
         }

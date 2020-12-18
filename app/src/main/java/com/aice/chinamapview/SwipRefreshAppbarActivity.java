@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.aice.chinamapview.adapter.ProvinceAdapter;
+import com.aice.chinamapview.databinding.ActivitySwiprefreshappbarBinding;
 import com.aice.chinamapview.listener.AppBarLayoutStateChangeListener;
 import com.aice.chinamapview.model.MycolorArea;
 import com.aice.chinamapview.util.ColorChangeUtil;
@@ -21,30 +22,15 @@ import java.util.HashMap;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 import static com.aice.chinamapview.listener.AppBarLayoutStateChangeListener.State.EXPANDED;
 
 public class SwipRefreshAppbarActivity extends AppCompatActivity {
-
-    @BindView(R.id.chinamap_view)
-    ChinaMapView chinamapView;
-    @BindView(R.id.color_view)
-    ColorView colorView;
-    @BindView(R.id.btn_change)
-    Button btnChange;
-    @BindView(R.id.appbar_layout)
-    AppBarLayout appbarLayout;
-    @BindView(R.id.recycle)
-    RecyclerView recycle;
-    @BindView(R.id.swipe)
-    SwipeRefreshLayout swipe;
-
+    private ActivitySwiprefreshappbarBinding mBinding;
     private ChinaMapModel chinaMapModel;
     private HashMap<String, List<MycolorArea>> colorView_hashmap;
     private int currentColor = 0;
@@ -55,8 +41,7 @@ public class SwipRefreshAppbarActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_swiprefreshappbar);
-        ButterKnife.bind(this);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_swiprefreshappbar);
         //初始化map
         initMap();
         //设置颜色渐变条
@@ -66,31 +51,42 @@ public class SwipRefreshAppbarActivity extends AppCompatActivity {
         intMapColor();
         initAppbarListener();
         initSwipRefresh();
+        mBinding.btnChange.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String namestring = ColorChangeUtil.nameStrings[++currentColor % ColorChangeUtil.nameStrings.length];
+                mBinding.btnChange.setText(namestring);
+                mBinding.colorView.setList(colorView_hashmap.get(namestring));
+                //重置map各省份颜色
+                ColorChangeUtil.changeMapColors(chinaMapModel, namestring);
+                mBinding.chinamapView.notifyDataChanged();
+            }
+        });
     }
 
     private void initSwipRefresh() {
-        swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        mBinding.swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                chinamapView.setEnableTouch(false);
+                mBinding.chinamapView.setEnableTouch(false);
                 //模拟耗时
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         String nameString = ColorChangeUtil.nameStrings[++currentColor % ColorChangeUtil.nameStrings.length];
-                        btnChange.setText(nameString);
-                        colorView.setList(colorView_hashmap.get(nameString));
+                        mBinding.btnChange.setText(nameString);
+                        mBinding.colorView.setList(colorView_hashmap.get(nameString));
                         //重置map各省份颜色
                         ColorChangeUtil.changeMapColors(chinaMapModel, nameString);
-                        chinamapView.notifyDataChanged();
-                        swipe.setRefreshing(false);
+                        mBinding.chinamapView.notifyDataChanged();
+                        mBinding.swipe.setRefreshing(false);
                         if (appbarState == EXPANDED) {
-                            swipe.setEnabled(true);
-                            chinamapView.setEnableTouch(true);
+                            mBinding.swipe.setEnabled(true);
+                            mBinding.chinamapView.setEnableTouch(true);
 
                         } else {
-                            swipe.setEnabled(false);
-                            chinamapView.setEnableTouch(false);
+                            mBinding.swipe.setEnabled(false);
+                            mBinding.chinamapView.setEnableTouch(false);
 
                         }
                     }
@@ -100,20 +96,20 @@ public class SwipRefreshAppbarActivity extends AppCompatActivity {
     }
 
     private void initAppbarListener() {
-        appbarLayout.addOnOffsetChangedListener(new AppBarLayoutStateChangeListener() {
+        mBinding.appbarLayout.addOnOffsetChangedListener(new AppBarLayoutStateChangeListener() {
             @Override
             public void onStateChanged(AppBarLayout appBarLayout, State state) {
                 appbarState = state;
                 switch (state) {
                     case EXPANDED:
-                        swipe.setEnabled(true);
-                        chinamapView.setEnableTouch(true);
+                        mBinding.swipe.setEnabled(true);
+                        mBinding.chinamapView.setEnableTouch(true);
                         break;
                     case COLLAPSED:
                     case INTERMEDIATE:
-                        chinamapView.setEnableTouch(false);
-                        if (!swipe.isRefreshing()) {
-                            swipe.setEnabled(false);
+                        mBinding.chinamapView.setEnableTouch(false);
+                        if (!mBinding.swipe.isRefreshing()) {
+                            mBinding.swipe.setEnabled(false);
                         }
                         break;
                 }
@@ -122,9 +118,9 @@ public class SwipRefreshAppbarActivity extends AppCompatActivity {
     }
 
     private void intMapColor() {
-        btnChange.setText(ColorChangeUtil.nameStrings[0]);
+        mBinding.btnChange.setText(ColorChangeUtil.nameStrings[0]);
         ColorChangeUtil.changeMapColors(chinaMapModel, ColorChangeUtil.nameStrings[currentColor]);
-        chinamapView.notifyDataChanged();
+        mBinding.chinamapView.notifyDataChanged();
     }
 
     private void initRecycleView() {
@@ -133,8 +129,8 @@ public class SwipRefreshAppbarActivity extends AppCompatActivity {
             list.add(ColorChangeUtil.province_datas[i]);
         }
         adapter = new ProvinceAdapter(R.layout.recycle_province_item, list);
-        recycle.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        recycle.setAdapter(adapter);
+        mBinding.recycle.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        mBinding.recycle.setAdapter(adapter);
     }
 
     /**
@@ -154,15 +150,15 @@ public class SwipRefreshAppbarActivity extends AppCompatActivity {
             }
             colorView_hashmap.put(ColorChangeUtil.nameStrings[i], list);
         }
-        colorView.setList(colorView_hashmap.get(ColorChangeUtil.nameStrings[0]));
+        mBinding.colorView.setList(colorView_hashmap.get(ColorChangeUtil.nameStrings[0]));
     }
 
     private void initMap() {
-        chinaMapModel = chinamapView.getChinaMapModel();
+        chinaMapModel = mBinding.chinamapView.getChinaMapModel();
         //传数据
-        chinamapView.setScaleMax(3);
-        chinamapView.setScaleMin(1);
-        chinamapView.setOnProvinceClickLisener(new ChinaMapView.onProvinceClickLisener() {
+        mBinding.chinamapView.setScaleMax(3);
+        mBinding.chinamapView.setScaleMin(1);
+        mBinding.chinamapView.setOnProvinceClickLisener(new ChinaMapView.onProvinceClickLisener() {
             @Override
             public void onSelectProvince(String provinceName) {
                 for (int i = 0; i < list.size(); i++) {
@@ -176,19 +172,19 @@ public class SwipRefreshAppbarActivity extends AppCompatActivity {
                 }
             }
         });
-        chinamapView.setOnPromiseParentTouchListener(new ChinaMapView.onPromiseParentTouchListener() {
+        mBinding.chinamapView.setOnPromiseParentTouchListener(new ChinaMapView.onPromiseParentTouchListener() {
             @Override
             public void onPromiseTouch(boolean promise) {
-                swipe.setEnabled(promise);
+                mBinding.swipe.setEnabled(promise);
                 banAppBarScroll(promise);
-                Log.v("xixi=",promise+"");
+                Log.v("xixi=", promise + "");
             }
         });
     }
 
     private void banAppBarScroll(boolean isScroll) {
-        for (int i = 0; i < appbarLayout.getChildCount(); i++) {
-            View mAppBarChildAt = appbarLayout.getChildAt(i);
+        for (int i = 0; i < mBinding.appbarLayout.getChildCount(); i++) {
+            View mAppBarChildAt = mBinding.appbarLayout.getChildAt(i);
             AppBarLayout.LayoutParams mAppBarParams = (AppBarLayout.LayoutParams) mAppBarChildAt.getLayoutParams();
             if (isScroll) {
                 mAppBarParams.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
@@ -197,15 +193,5 @@ public class SwipRefreshAppbarActivity extends AppCompatActivity {
                 mAppBarParams.setScrollFlags(0);
             }
         }
-    }
-
-    @OnClick(R.id.btn_change)
-    public void onViewClicked() {
-        String namestring = ColorChangeUtil.nameStrings[++currentColor % ColorChangeUtil.nameStrings.length];
-        btnChange.setText(namestring);
-        colorView.setList(colorView_hashmap.get(namestring));
-        //重置map各省份颜色
-        ColorChangeUtil.changeMapColors(chinaMapModel, namestring);
-        chinamapView.notifyDataChanged();
     }
 }

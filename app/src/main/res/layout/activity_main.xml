@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -20,3 +21,4 @@
         android:text="下拉刷新及其他滑动冲突"
         android:id="@+id/btn_refresh"></Button>
 </LinearLayout>
+</layout>

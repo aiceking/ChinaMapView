@@ -3,54 +3,42 @@ package com.aice.chinamapview;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.TextView;
 
+import com.aice.chinamapview.databinding.ActivityNormalBinding;
 import com.wxy.chinamapview.model.ChinaMapModel;
 import com.wxy.chinamapview.model.ProvinceModel;
 import com.wxy.chinamapview.view.ChinaMapView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+import androidx.databinding.DataBindingUtil;
 import top.defaults.colorpicker.ColorPickerPopup;
 
-public class NormalActivity extends AppCompatActivity {
-
-    @BindView(R.id.map)
-    ChinaMapView map;
-    @BindView(R.id.tv_name)
-    TextView tvName;
-    @BindView(R.id.btn_province_color)
-    Button btnProvinceColor;
-    @BindView(R.id.btn_border_unselect_color)
-    Button btnBorderUnselectColor;
-    @BindView(R.id.btn_border_select_color)
-    Button btnBorderSelectColor;
-    @BindView(R.id.checkbox_province_name)
-    CheckBox checkBox;
+public class NormalActivity extends AppCompatActivity implements View.OnClickListener {
+    private ActivityNormalBinding mBinding;
     private ChinaMapModel chinaMapModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_normal);
-        ButterKnife.bind(this);
-        chinaMapModel = map.getChinaMapModel();
-        map.setScaleMin(1);
-        map.setScaleMax(3);
-        map.setOnProvinceClickLisener(new ChinaMapView.onProvinceClickLisener() {
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_normal);
+        chinaMapModel = mBinding.map.getChinaMapModel();
+        mBinding.map.setScaleMin(1);
+        mBinding.map.setScaleMax(3);
+        mBinding.map.setOnProvinceClickLisener(new ChinaMapView.onProvinceClickLisener() {
             @Override
             public void onSelectProvince(String provinceName) {
-                tvName.setText(provinceName);
+                mBinding.tvName.setText(provinceName);
             }
         });
+        mBinding.btnProvinceColor.setOnClickListener(this);
+        mBinding.btnBorderUnselectColor.setOnClickListener(this);
+        mBinding.btnBorderSelectColor.setOnClickListener(this);
+        mBinding.btnProvinceNameColor.setOnClickListener(this);
+        mBinding.checkboxProvinceName.setOnClickListener(this);
     }
 
-    @OnClick({R.id.btn_province_color, R.id.btn_border_unselect_color, R.id.btn_border_select_color,R.id.checkbox_province_name,R.id.btn_province_name_color})
-    public void onViewClicked(View view) {
+    @Override
+    public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_province_color:
                 new ColorPickerPopup.Builder(this)
@@ -62,13 +50,13 @@ public class NormalActivity extends AppCompatActivity {
                         .showIndicator(true)
                         .showValue(true)
                         .build()
-                        .show(btnProvinceColor, new ColorPickerPopup.ColorPickerObserver() {
+                        .show(mBinding.btnProvinceColor, new ColorPickerPopup.ColorPickerObserver() {
                             @Override
                             public void onColorPicked(int color) {
                                 for (ProvinceModel provinceModel:chinaMapModel.getProvincesList()){
                                     provinceModel.setColor(color);
                                 }
-                                map.notifyDataChanged();
+                                mBinding.map.notifyDataChanged();
                             }
                         });
                 break;
@@ -82,13 +70,13 @@ public class NormalActivity extends AppCompatActivity {
                         .showIndicator(true)
                         .showValue(true)
                         .build()
-                        .show(btnBorderUnselectColor, new ColorPickerPopup.ColorPickerObserver() {
+                        .show(mBinding.btnBorderUnselectColor, new ColorPickerPopup.ColorPickerObserver() {
                             @Override
                             public void onColorPicked(int color) {
                                 for (ProvinceModel provinceModel:chinaMapModel.getProvincesList()){
                                     provinceModel.setNormalBorderColor(color);
                                 }
-                                map.notifyDataChanged();
+                                mBinding.map.notifyDataChanged();
                             }
                         });
                 break;
@@ -102,13 +90,13 @@ public class NormalActivity extends AppCompatActivity {
                         .showIndicator(true)
                         .showValue(true)
                         .build()
-                        .show(btnBorderSelectColor, new ColorPickerPopup.ColorPickerObserver() {
+                        .show(mBinding.btnBorderSelectColor, new ColorPickerPopup.ColorPickerObserver() {
                             @Override
                             public void onColorPicked(int color) {
                                 for (ProvinceModel provinceModel:chinaMapModel.getProvincesList()){
                                     provinceModel.setSelectBorderColor(color);
                                 }
-                                map.notifyDataChanged();
+                                mBinding.map.notifyDataChanged();
                             }
                         });
                 break;
@@ -122,20 +110,19 @@ public class NormalActivity extends AppCompatActivity {
                         .showIndicator(true)
                         .showValue(true)
                         .build()
-                        .show(btnBorderSelectColor, new ColorPickerPopup.ColorPickerObserver() {
+                        .show(mBinding.btnBorderSelectColor, new ColorPickerPopup.ColorPickerObserver() {
                             @Override
                             public void onColorPicked(int color) {
                                 for (ProvinceModel provinceModel:chinaMapModel.getProvincesList()){
                                     provinceModel.setNameColor(color);
                                 }
-                                map.notifyDataChanged();
+                                mBinding.map.notifyDataChanged();
                             }
                         });
                 break;
             case R.id.checkbox_province_name:
-
-                chinaMapModel.setShowName(checkBox.isChecked());
-                map.notifyDataChanged();
+                chinaMapModel.setShowName(mBinding.checkboxProvinceName.isChecked());
+                mBinding.map.notifyDataChanged();
                 break;
         }
     }
