@@ -63,6 +63,7 @@
 |方法  |参数  | 作用  |
 | :--------| :--------| :--: |
 |setEnableTouch  |boolean  | 设置是否可以消费事件（默认为true）  |
+|setEnableScroll  |boolean  | 设置是否可以缩放和拖动（默认为true）  |
 |setScaleMin  |int  | 设置缩放的最小倍数，最终结果>=0  |
 |setScaleMax  |int  | 设置缩放的最大倍数，最终结果>=1  |
 |getChinaMapModel  |ChinaMapModel  | 返回ChinaMapModel对象，用于之后的修改刷新view的展示  |
@@ -83,7 +84,7 @@ Step 1. Add it in your root build.gradle at the end of repositories:
 Step 2. Add the dependency
 
 	dependencies {
-	        implementation 'com.github.NoEndToLF:ChinaMapView:1.0.3'
+	        implementation 'com.github.NoEndToLF:ChinaMapView:1.0.4'
 	}
 ### 布局XML中添加	
 #### 布局XML中添加与系统View使用方式一样，宽高如果只确定其一，另一个根据parent的宽高和map的比例取最小值确定。最终map的宽度和高度由padding决定
