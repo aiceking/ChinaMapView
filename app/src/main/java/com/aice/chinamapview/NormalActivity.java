@@ -24,17 +24,13 @@ public class NormalActivity extends AppCompatActivity implements View.OnClickLis
         chinaMapModel = mBinding.map.getChinaMapModel();
         mBinding.map.setScaleMin(1);
         mBinding.map.setScaleMax(3);
-        mBinding.map.setOnProvinceClickLisener(new ChinaMapView.onProvinceClickLisener() {
-            @Override
-            public void onSelectProvince(String provinceName) {
-                mBinding.tvName.setText(provinceName);
-            }
-        });
+        mBinding.map.setOnProvinceClickLisener(provinceName -> mBinding.tvName.setText(provinceName));
         mBinding.btnProvinceColor.setOnClickListener(this);
         mBinding.btnBorderUnselectColor.setOnClickListener(this);
         mBinding.btnBorderSelectColor.setOnClickListener(this);
         mBinding.btnProvinceNameColor.setOnClickListener(this);
         mBinding.checkboxProvinceName.setOnClickListener(this);
+        mBinding.checkboxProvinceMoveScale.setOnClickListener(this);
     }
 
     @Override
@@ -123,6 +119,9 @@ public class NormalActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.checkbox_province_name:
                 chinaMapModel.setShowName(mBinding.checkboxProvinceName.isChecked());
                 mBinding.map.notifyDataChanged();
+                break;
+            case R.id.checkbox_province_move_scale:
+                mBinding.map.setEnableScroll(!mBinding.checkboxProvinceMoveScale.isChecked());
                 break;
         }
     }

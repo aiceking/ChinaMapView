@@ -47,6 +47,11 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/checkbox_province_name"
                 android:text="是否展示省份名称"/>
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/checkbox_province_move_scale"
+                android:text="不允许缩放和拖动，只允许点击"/>
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

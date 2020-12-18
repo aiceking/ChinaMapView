@@ -33,8 +33,8 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-//    implementation project(':chinamapviewlibrary')
-    implementation 'com.github.NoEndToLF:ChinaMapView:1.0.3'
+    implementation project(':chinamapviewlibrary')
+//    implementation 'com.github.NoEndToLF:ChinaMapView:1.0.3'
     implementation 'com.android.support:design:29.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'

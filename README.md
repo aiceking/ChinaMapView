@@ -29,9 +29,9 @@
 |![normal](https://github.com/NoEndToLF/ChinaMapView/blob/master/DemoImg/demo1.gif)|  ![fix](https://github.com/NoEndToLF/ChinaMapView/blob/master/DemoImg/demo2.gif)|   
 
 
- |展示省份名字(1.0.2新增支持)  | 
-| :--------:| 
-| ![name](https://github.com/NoEndToLF/ChinaMapView/blob/master/DemoImg/demo0.gif)|
+ |展示省份名字(1.0.2新增支持)  |只允许点击，不允许缩放和拖动（1.0.4新增支持）  |
+| :--------:|  :--------:| 
+| ![name](https://github.com/NoEndToLF/ChinaMapView/blob/master/DemoImg/demo0.gif)|  ![fix](https://github.com/NoEndToLF/ChinaMapView/blob/master/DemoImg/demo3.gif)| 
 
 # 开始使用  
 * [基本API](#基本API)

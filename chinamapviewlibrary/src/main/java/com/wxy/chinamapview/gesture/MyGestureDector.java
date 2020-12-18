@@ -53,7 +53,7 @@ public class MyGestureDector {
         this.viewHeight = viewHeight;
     }
 
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent(boolean enableScroll, MotionEvent event) {
 
         switch (event.getAction() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN:
@@ -62,7 +62,7 @@ public class MyGestureDector {
                 downY = event.getY();
                 onMoveDownX = event.getX();
                 onMoveDownY = event.getY();
-                isConsume = view.consumeEvent(event);
+                isConsume = view.consumeEvent(enableScroll,event);
                 if (onPromiseParentTouchListener != null) {
                     if (isConsume) {
                         view.getParent().requestDisallowInterceptTouchEvent(true);

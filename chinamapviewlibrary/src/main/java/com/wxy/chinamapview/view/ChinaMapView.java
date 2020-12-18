@@ -48,12 +48,16 @@ public class ChinaMapView extends View {
     private MyGestureDector myGestureDector;//拖动惯性滑动点击帮助类
     private MyScaleGestureDetector scaleGestureDetector;
     private onPromiseParentTouchListener onPromiseParentTouchListener;//是否允许父控件拦截事件
+    private boolean enableScroll;
+    private boolean enableTouch;
 
     public void setEnableTouch(boolean enableTouch) {
         this.enableTouch = enableTouch;
     }
 
-    private boolean enableTouch;
+    public void setEnableScroll(boolean enableScroll) {
+        this.enableScroll = enableScroll;
+    }
 
     public void setOnPromiseParentTouchListener(ChinaMapView.onPromiseParentTouchListener onPromiseParentTouchListener) {
         this.onPromiseParentTouchListener = onPromiseParentTouchListener;
@@ -116,6 +120,7 @@ public class ChinaMapView extends View {
         chinaMapModel = new ChinaMapSvgUtil(context).getProvinces();
         isFirst = true;
         enableTouch = true;
+        enableScroll= true;
         //初始化省份名字画笔
         namePaint = new Paint();
         namePaint.setAntiAlias(true);
@@ -351,7 +356,10 @@ public class ChinaMapView extends View {
     }
 
     //用于事件拦截,是否消费事件
-    public boolean consumeEvent(MotionEvent event) {
+    public boolean consumeEvent(boolean enableScroll, MotionEvent event) {
+        if (!enableScroll) {
+            return false;
+        }
         boolean consume = false;
         RectF rectF = getMatrixRectF();
         //把坐标换算到初始坐标系，用于判断点击坐标是否在某个省份内
@@ -372,9 +380,11 @@ public class ChinaMapView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (enableTouch) {
-            scaleGestureDetector.onTouchEvent(event);
+            if (enableScroll) {
+                scaleGestureDetector.onTouchEvent(event);
+            }
             if (!scaleGestureDetector.isInProgress()) {
-                myGestureDector.onTouchEvent(event);
+                myGestureDector.onTouchEvent(enableScroll, event);
             }
             return true;
         } else {
