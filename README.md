@@ -1,4 +1,4 @@
-# 区域热力地图 ChinaMapView
+# 中国地图 ChinaMapView
 
 [![](https://jitpack.io/v/NoEndToLF/ChinaMapView.svg)](https://jitpack.io/#NoEndToLF/ChinaMapView)
 
