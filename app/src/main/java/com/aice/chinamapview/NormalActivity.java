@@ -2,6 +2,7 @@ package com.aice.chinamapview;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.aice.chinamapview.databinding.ActivityNormalBinding;
@@ -24,7 +25,10 @@ public class NormalActivity extends AppCompatActivity implements View.OnClickLis
         chinaMapModel = mBinding.map.getChinaMapModel();
         mBinding.map.setScaleMin(1);
         mBinding.map.setScaleMax(3);
-        mBinding.map.setOnProvinceClickLisener(provinceName -> mBinding.tvName.setText(provinceName));
+        mBinding.map.setOnProvinceClickLisener(provinceName -> {
+            mBinding.tvName.setText(provinceName);
+            Log.v("Map","select province: "+provinceName);
+        });
         mBinding.btnProvinceColor.setOnClickListener(this);
         mBinding.btnBorderUnselectColor.setOnClickListener(this);
         mBinding.btnBorderSelectColor.setOnClickListener(this);

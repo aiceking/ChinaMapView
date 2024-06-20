@@ -3,7 +3,7 @@ package com.aice.chinamapview.model;
 /**
  * Created by Vmmet on 2016/9/29.
  */
-public class MycolorArea {
+public class MyColorArea {
     private int color;
     private String text;
 

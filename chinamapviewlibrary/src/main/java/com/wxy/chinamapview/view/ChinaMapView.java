@@ -120,7 +120,7 @@ public class ChinaMapView extends View {
         chinaMapModel = new ChinaMapSvgUtil(context).getProvinces();
         isFirst = true;
         enableTouch = true;
-        enableScroll= true;
+        enableScroll = true;
         //初始化省份名字画笔
         namePaint = new Paint();
         namePaint.setAntiAlias(true);
@@ -173,16 +173,20 @@ public class ChinaMapView extends View {
             @Override
             public void onClick(int x, int y) {
                 //只有点击在某一个省份内才会触发省份选择接口
-                for (ProvinceModel p : chinaMapModel.getProvincesList()) {
-                    for (Region region : p.getRegionList()) {
-                        if (region.contains((int) x, (int) y)) {
+                for (ProvinceModel provinceModel : chinaMapModel.getProvincesList()) {
+                    for (Region region : provinceModel.getRegionList()) {
+                        if (region.contains(x, y)) {
                             //重置上一次选中省份的状态
                             if (selectPosition != -1) {
                                 chinaMapModel.getProvincesList().get(selectPosition).setSelect(false);
                             }
                             //设置新的选中的省份
-                            p.setSelect(true);
+                            provinceModel.setSelect(true);
                             invalidate();
+                            //暴露到Activity中的接口，把省的名字传过去
+                            if (onProvinceClickLisener != null) {
+                                onProvinceClickLisener.onSelectProvince(provinceModel.getName());
+                            }
                             return;
 
                         }
@@ -412,10 +416,6 @@ public class ChinaMapView extends View {
                 }
             }
             if (selectPosition != -1) {
-                //暴露到Activity中的接口，把省的名字传过去
-                if (onProvinceClickLisener != null) {
-                    onProvinceClickLisener.onSelectProvince(chinaMapModel.getProvincesList().get(selectPosition).getName());
-                }
                 //再绘制点击所在的省份,此时画笔宽度设为2.5，以达到着重显示的效果
                 innerPaint.setColor(chinaMapModel.getProvincesList().get(selectPosition).getColor());
                 outerPaint.setColor(chinaMapModel.getProvincesList().get(selectPosition).getSelectBorderColor());

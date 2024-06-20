@@ -7,14 +7,14 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.aice.chinamapview.model.MycolorArea;
+import com.aice.chinamapview.model.MyColorArea;
 import java.util.List;
 /**
  * Created by Vmmet on 2016/9/29.
  */
 public class ColorView extends View {
     private Paint colorPaint;
-    private List<MycolorArea> list;
+    private List<MyColorArea> list;
     public ColorView(Context context) {
         super(context);
     }
@@ -29,7 +29,7 @@ public class ColorView extends View {
     public ColorView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
-public void setList(List<MycolorArea> list){
+public void setList(List<MyColorArea> list){
     this.list=list;
     invalidate();
 }

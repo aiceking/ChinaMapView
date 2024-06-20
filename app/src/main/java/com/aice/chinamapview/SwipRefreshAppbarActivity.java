@@ -5,14 +5,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 
 import com.aice.chinamapview.adapter.ProvinceAdapter;
 import com.aice.chinamapview.databinding.ActivitySwiprefreshappbarBinding;
 import com.aice.chinamapview.listener.AppBarLayoutStateChangeListener;
-import com.aice.chinamapview.model.MycolorArea;
+import com.aice.chinamapview.model.MyColorArea;
 import com.aice.chinamapview.util.ColorChangeUtil;
-import com.aice.chinamapview.view.ColorView;
 import com.google.android.material.appbar.AppBarLayout;
 import com.wxy.chinamapview.model.ChinaMapModel;
 import com.wxy.chinamapview.view.ChinaMapView;
@@ -24,7 +22,6 @@ import java.util.List;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import static com.aice.chinamapview.listener.AppBarLayoutStateChangeListener.State.EXPANDED;
@@ -32,7 +29,7 @@ import static com.aice.chinamapview.listener.AppBarLayoutStateChangeListener.Sta
 public class SwipRefreshAppbarActivity extends AppCompatActivity {
     private ActivitySwiprefreshappbarBinding mBinding;
     private ChinaMapModel chinaMapModel;
-    private HashMap<String, List<MycolorArea>> colorView_hashmap;
+    private HashMap<String, List<MyColorArea>> colorView_hashmap;
     private int currentColor = 0;
     private List<String> list;
     private ProvinceAdapter adapter;
@@ -141,9 +138,9 @@ public class SwipRefreshAppbarActivity extends AppCompatActivity {
         for (int i = 0; i < ColorChangeUtil.nameStrings.length; i++) {
             String colors[] = ColorChangeUtil.colorStrings[i].split(",");
             String texts[] = ColorChangeUtil.textStrings[i].split(",");
-            List<MycolorArea> list = new ArrayList<>();
+            List<MyColorArea> list = new ArrayList<>();
             for (int j = 0; j < colors.length; j++) {
-                MycolorArea c = new MycolorArea();
+                MyColorArea c = new MyColorArea();
                 c.setColor(Color.parseColor(colors[j]));
                 c.setText(texts[j]);
                 list.add(c);
@@ -177,7 +174,7 @@ public class SwipRefreshAppbarActivity extends AppCompatActivity {
             public void onPromiseTouch(boolean promise) {
                 mBinding.swipe.setEnabled(promise);
                 banAppBarScroll(promise);
-                Log.v("xixi=", promise + "");
+                Log.v("Map", promise + "");
             }
         });
     }
